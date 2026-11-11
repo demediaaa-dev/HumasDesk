@@ -339,7 +339,7 @@
         let currentFilter = 'all';
         let contents = [];
         let deferredPrompt = null;
-        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || '';
+        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || 'https://script.google.com/macros/s/AKfycbw3UX-xHPjb-lhkICaUATvnY2eb7xBGD5dJVsHBBjO2NgPKh4UyKgRAuZFzO7SshcHj/exec';
 
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
