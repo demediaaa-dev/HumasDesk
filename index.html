@@ -42,8 +42,8 @@
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden;
         }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -107,7 +107,7 @@
         </div>
 
         <!-- ==================== MAIN APP ==================== -->
-        <div id="appScreen" class="hidden flex-1 flex flex-col pb-28">
+        <div id="appScreen" class="hidden flex-1 flex flex-col pb-24">
             
             <!-- App Header -->
             <header class="bg-brand-600 text-white px-6 pt-6 pb-12 rounded-b-[2.5rem] shadow-lg relative">
@@ -142,7 +142,7 @@
                 </div>
             </header>
 
-            <!-- Main Dynamic Content Container (Area Swipe Gesture) -->
+            <!-- Main Dynamic Content Container -->
             <main id="swipeArea" class="px-4 -mt-6 space-y-5 flex-1 touch-pan-y">
 
                 <!-- ==================== TAB 1: DASHBOARD ==================== -->
@@ -226,7 +226,7 @@
 
                     <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
                         <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="bx bx-folder-open text-3xl"></i>
+                            <i class="bx bx-balloon-open text-3xl"></i>
                         </div>
                         <h4 class="font-bold text-slate-700 text-sm">Belum Ada Konten</h4>
                         <p class="text-xs text-slate-400 mt-1">Tambahkan ide konten baru tim humas sekarang!</p>
@@ -261,29 +261,40 @@
 
                 <!-- ==================== TAB 3: PESAN CHAT ==================== -->
                 <div id="tab-chat" class="tab-content hidden space-y-4">
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-4 space-y-3 flex flex-col h-[65vh]">
-                        <div class="flex items-center justify-between border-b pb-2">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="bx bx-message-square-dots text-brand-600 text-lg"></i> Diskusi Internal Tim
-                            </h3>
-                            <button onclick="loadChats()" class="text-[11px] text-brand-600 font-semibold hover:underline flex items-center gap-1">
-                                <i class="bx bx-refresh"></i> Muat Ulang
+                    <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden flex flex-col h-[68vh]">
+                        
+                        <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">
+                                    <i class="bx bxs-group text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-sm leading-tight">Grup Diskusi Humas</h3>
+                                    <p class="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span> Koordinasi Tim Internal
+                                    </p>
+                                </div>
+                            </div>
+                            <button onclick="loadChats()" title="Refresh Chat" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-brand-600 flex items-center justify-center transition">
+                                <i class="bx bx-refresh text-lg"></i>
                             </button>
                         </div>
 
-                        <div id="chatMessagesList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+                        <div id="chatMessagesList" class="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f0f4f8]"></div>
 
-                        <form id="chatForm" onsubmit="handleSendChat(event)" class="space-y-2 border-t pt-3">
-                            <div class="flex gap-2">
-                                <input type="text" id="chatSenderInput" placeholder="Nama Anda" required
-                                    class="w-1/3 p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
-                                <input type="text" id="chatTextInput" placeholder="Tulis pesan internal..." required
-                                    class="w-2/3 p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <form id="chatForm" onsubmit="handleSendChat(event)" class="p-3 bg-white border-t border-slate-100 space-y-2">
+                            <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                                <i class="bx bxs-user-badge text-brand-600 text-base"></i>
+                                <input type="text" id="chatSenderInput" placeholder="Ketik Nama Pengirim (cth: Budi)" required
+                                    class="w-full bg-transparent text-xs font-medium text-slate-700 focus:outline-none">
                             </div>
-                            <button type="submit" class="w-full py-2.5 bg-brand-600 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 hover:bg-brand-700">
-                                <span>Kirim Pesan</span>
-                                <i class="bx bx-send"></i>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="chatTextInput" placeholder="Ketik pesan..." required autocomplete="off"
+                                    class="flex-1 px-4 py-2.5 bg-slate-100 rounded-full text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                                <button type="submit" class="w-10 h-10 bg-brand-600 hover:bg-brand-700 text-white rounded-full flex items-center justify-center shadow-md active:scale-90 transition shrink-0">
+                                    <i class="bx bxs-send text-base ml-0.5"></i>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -310,23 +321,23 @@
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
                 
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-alt-2" data-solid="bxs-home-alt-2" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bxs-home-alt-2 text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-smile" data-solid="bxs-home-smile" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bxs-home-smile text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
                 
-                <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-folder" data-solid="bxs-folder" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bx-folder text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-balloon" data-solid="bxs-balloon" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-balloon text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
                 
-                <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-chat" data-solid="bxs-chat" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bx-chat text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-message-square-dots" data-solid="bxs-message-square-dots" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-message-square-dots text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
                 
-                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-calendar" data-solid="bxs-calendar" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bx-calendar text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-notepad" data-solid="bxs-notepad" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-notepad text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
 
@@ -427,9 +438,10 @@
         let currentFilter = 'all';
         let contents = [];
         let messages = [];
+        let isUpdatingStage = false;
 
         // 📌 PASTEKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI ANTARA TANDA PETIK DI BAWAH INI
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzG34DCVmaXIhzAUJpujYn5-mZ6ZhGyqYNFZKVCb9MmmC3PQzugIARPHYuuiAQosFly/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbyOTZWB4R3cHRK1IDVzr2eCGOCAYRYuiQ2e-WVmSBZR0QMK-jiJk5mzHHmxxthEBirI/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -438,16 +450,19 @@
             renderHolidaysTab();
             setTodayDeadlineDefault();
             initSwipeGesture();
+
+            const savedSender = localStorage.getItem('HUMAS_CHAT_SENDER');
+            if (savedSender) {
+                document.getElementById('chatSenderInput').value = savedSender;
+            }
         });
 
-        // ==================== SWIPE LEFT / RIGHT GESTURE ====================
         function initSwipeGesture() {
             const swipeArea = document.getElementById('appScreen');
             let touchStartX = 0;
             let touchStartY = 0;
 
             swipeArea.addEventListener('touchstart', (e) => {
-                // Abaikan swipe jika user sedang menggeser tabel horizontal
                 if (e.target.closest('.overflow-x-auto')) return;
                 touchStartX = e.changedTouches[0].screenX;
                 touchStartY = e.changedTouches[0].screenY;
@@ -461,14 +476,11 @@
                 const diffX = touchEndX - touchStartX;
                 const diffY = touchEndY - touchStartY;
 
-                // Pastikan gerakan dominan horizontal (> 60px) dan bukan scroll vertikal
                 if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
                     const currentIndex = TAB_ORDER.indexOf(currentTab);
                     if (diffX < 0 && currentIndex < TAB_ORDER.length - 1) {
-                        // Geser ke Kiri -> Pindah ke Tab Berikutnya
                         switchTab(TAB_ORDER[currentIndex + 1]);
                     } else if (diffX > 0 && currentIndex > 0) {
-                        // Geser ke Kanan -> Pindah ke Tab Sebelumnya
                         switchTab(TAB_ORDER[currentIndex - 1]);
                     }
                 }
@@ -517,6 +529,11 @@
             if (activeDot) activeDot.classList.remove('hidden');
 
             currentTab = tabName;
+
+            if (tabName === 'chat') {
+                const container = document.getElementById('chatMessagesList');
+                container.scrollTop = container.scrollHeight;
+            }
         }
 
         function setTodayDeadlineDefault() {
@@ -569,31 +586,34 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // ==================== DATABASE SYNC (FIXED CORS) ====================
         async function postToGas(payload) {
-            if (!appsScriptUrl) return false;
+            if (!appsScriptUrl) return { ok: false };
             try {
-                // Menggunakan text/plain agar Google Apps Script tidak terblokir CORS preflight
                 const response = await fetch(appsScriptUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
                 const resJson = await response.json();
-                return resJson.status === 'success' || resJson.status === 'deleted';
+                return { ok: true, status: resJson.status };
             } catch (err) {
                 console.error('GAS POST Error:', err);
-                return false;
+                return { ok: false };
             }
         }
 
+        // ==================== CHAT SYSTEM ====================
         async function loadChats() {
             if (appsScriptUrl) {
                 try {
                     const res = await fetch(`${appsScriptUrl}?action=getChats&t=${Date.now()}`);
                     const data = await res.json();
                     if (Array.isArray(data)) {
-                        messages = data;
+                        messages = data.filter(m => m && (m.sender || m.text)).map(m => ({
+                            sender: m.sender || 'Anggota Tim',
+                            text: m.text || '',
+                            time: m.time || ''
+                        }));
                         localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
                     }
                 } catch (e) {
@@ -607,19 +627,34 @@
 
         function loadLocalChats() {
             const localMsgs = localStorage.getItem('HUMAS_CHAT_DATA');
-            messages = localMsgs ? JSON.parse(localMsgs) : [];
+            if (localMsgs) {
+                const parsed = JSON.parse(localMsgs);
+                messages = parsed.filter(m => m && (m.sender || m.text)).map(m => ({
+                    sender: m.sender || 'Anggota Tim',
+                    text: m.text || '',
+                    time: m.time || ''
+                }));
+            } else {
+                messages = [];
+            }
         }
 
         async function handleSendChat(e) {
             e.preventDefault();
-            const sender = document.getElementById('chatSenderInput').value;
-            const text = document.getElementById('chatTextInput').value;
+            const sender = document.getElementById('chatSenderInput').value.trim();
+            const text = document.getElementById('chatTextInput').value.trim();
+            if (!sender || !text) return;
+
+            localStorage.setItem('HUMAS_CHAT_SENDER', sender);
+
+            const now = new Date();
+            const timeFormatted = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
             const newMsg = {
                 type: 'chat',
                 sender: sender,
                 text: text,
-                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                time: timeFormatted
             };
 
             messages.push(newMsg);
@@ -628,32 +663,73 @@
             renderChats();
 
             if (appsScriptUrl) {
-                const ok = await postToGas(newMsg);
-                if (ok) showToast('Pesan terkirim ke Database');
+                const res = await postToGas(newMsg);
+                if (res.ok) showToast('Pesan terkirim');
             }
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         function renderChats() {
             const container = document.getElementById('chatMessagesList');
             container.innerHTML = '';
+
             if (messages.length === 0) {
-                container.innerHTML = `<p class="text-center text-xs text-slate-400 py-10">Belum ada diskusi tim. Mulai percakapan!</p>`;
-                return;
-            }
-            messages.forEach(m => {
-                container.innerHTML += `
-                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
-                        <div class="flex justify-between items-center text-[10px]">
-                            <strong class="text-brand-700">${m.sender}</strong>
-                            <span class="text-slate-400">${m.time}</span>
-                        </div>
-                        <p class="text-xs text-slate-700">${m.text}</p>
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 space-y-2 py-10">
+                        <i class="bx bx-message-rounded-dots text-4xl text-slate-300"></i>
+                        <p class="text-xs">Belum ada pesan di ruang diskusi.<br>Mulai obrolan dengan tim sekarang!</p>
                     </div>
                 `;
+                return;
+            }
+
+            const myName = (document.getElementById('chatSenderInput').value || localStorage.getItem('HUMAS_CHAT_SENDER') || '').trim().toLowerCase();
+
+            messages.forEach(m => {
+                const senderName = m.sender ? String(m.sender) : 'Anggota Tim';
+                const messageText = m.text ? String(m.text) : '';
+                const messageTime = m.time ? String(m.time) : '';
+
+                const isMine = myName && senderName.trim().toLowerCase() === myName;
+
+                if (isMine) {
+                    container.innerHTML += `
+                        <div class="flex flex-col items-end">
+                            <div class="max-w-[80%] bg-brand-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm shadow-sm">
+                                <p class="text-xs leading-relaxed break-words">${escapeHtml(messageText)}</p>
+                                <div class="flex items-center justify-end gap-1 mt-1 text-[10px] text-brand-100">
+                                    <span>${escapeHtml(messageTime)}</span>
+                                    <i class="bx bx-check-double text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="flex flex-col items-start">
+                            <div class="max-w-[80%] bg-white text-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100">
+                                <span class="block text-[11px] font-bold text-brand-600 mb-0.5">${escapeHtml(senderName)}</span>
+                                <p class="text-xs leading-relaxed text-slate-700 break-words">${escapeHtml(messageText)}</p>
+                                <div class="text-right mt-1 text-[10px] text-slate-400">
+                                    <span>${escapeHtml(messageTime)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             });
+
             container.scrollTop = container.scrollHeight;
         }
 
+        // ==================== MASTER DATA CONTENT (ANTI DUPLIKASI) ====================
         async function loadData() {
             updateSyncStatus();
             if (appsScriptUrl) {
@@ -686,27 +762,11 @@
             localStorage.setItem('HUMAS_KONTEN_DATA', JSON.stringify(contents));
         }
 
-        async function syncToBackend(item) {
-            saveDataLocal();
-            renderDashboard();
-            renderMatrixTable();
-
-            if (appsScriptUrl) {
-                showToast('Menyimpan ke Spreadsheet...');
-                const ok = await postToGas(item);
-                if (ok) {
-                    showToast('Berhasil masuk Database!');
-                    updateSyncStatus(true);
-                } else {
-                    showToast('Gagal kirim ke GAS! Cek izin deploy Anyone.');
-                    updateSyncStatus(false);
-                }
-            }
-        }
-
-        function handleFormSubmit(e) {
+        // Tambah Konten Baru (action: 'create')
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const newItem = {
+                action: 'create',
                 id: 'KONTEN-' + Date.now(),
                 ide: document.getElementById('inputIde').value,
                 link: document.getElementById('inputLink').value,
@@ -718,31 +778,81 @@
             };
 
             contents.unshift(newItem);
-            syncToBackend(newItem);
+            saveDataLocal();
+            renderDashboard();
+            renderMatrixTable();
+
             toggleModal(false);
             e.target.reset();
             setTodayDeadlineDefault();
+
+            if (appsScriptUrl) {
+                showToast('Menyimpan konten baru...');
+                const res = await postToGas(newItem);
+                if (res.ok) {
+                    showToast('Tersimpan di Spreadsheet!');
+                    updateSyncStatus(true);
+                } else {
+                    showToast('Gagal simpan ke GAS!');
+                    updateSyncStatus(false);
+                }
+            }
         }
 
-        function advanceStage(id) {
-            const item = contents.find(c => c.id === id);
+        // Update Tahap Konten (action: 'update' - hanya menimpa baris yang sama)
+        async function advanceStage(id) {
+            if (isUpdatingStage) return; // Cegah klik berulang saat proses berjalan
+
+            const item = contents.find(c => String(c.id).trim() === String(id).trim());
             if (!item) return;
+
             const idx = STAGES.indexOf(item.stage);
             if (idx < STAGES.length - 1) {
-                item.stage = STAGES[idx + 1];
-                item.pic = PIC_MAP[item.stage];
-                syncToBackend(item);
+                const nextStage = STAGES[idx + 1];
+                const nextPic = PIC_MAP[nextStage];
+
+                // Update tampilan lokal langsung
+                item.stage = nextStage;
+                item.pic = nextPic;
+                saveDataLocal();
+                renderDashboard();
+                renderMatrixTable();
+
+                if (appsScriptUrl) {
+                    isUpdatingStage = true;
+                    showToast(`Memperbarui tahap ke ${nextStage}...`);
+
+                    const res = await postToGas({
+                        action: 'update',
+                        id: String(item.id).trim(),
+                        stage: nextStage,
+                        pic: nextPic
+                    });
+
+                    isUpdatingStage = false;
+
+                    if (res.ok && res.status === 'updated') {
+                        showToast(`Tahap diperbarui: ${nextStage}`);
+                        updateSyncStatus(true);
+                    } else if (res.ok && res.status === 'not_found') {
+                        showToast('ID tidak ditemukan di Sheet, memuat ulang...');
+                        loadData();
+                    } else {
+                        showToast('Gagal update ke Spreadsheet!');
+                        updateSyncStatus(false);
+                    }
+                }
             }
         }
 
         async function deleteItem(id) {
             if (confirm('Hapus konten ini?')) {
-                contents = contents.filter(c => c.id !== id);
+                contents = contents.filter(c => String(c.id).trim() !== String(id).trim());
                 saveDataLocal();
                 renderDashboard();
                 renderMatrixTable();
                 if (appsScriptUrl) {
-                    await postToGas({ action: 'delete', id: id });
+                    await postToGas({ action: 'delete', id: String(id).trim() });
                     showToast('Dihapus dari Database');
                 }
             }
@@ -855,7 +965,7 @@
                                 <button onclick="advanceStage('${item.id}')" 
                                     class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-xl font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
                                     <i class="bx bx-check-circle text-brand-600"></i>
-                                    <span>Lanjut Tahap</span>
+                                    <span>Lanjutan Tahapan</span>
                                 </button>
                             ` : `
                                 <span class="text-emerald-600 font-bold flex items-center gap-1 text-[11px] bg-emerald-50 px-2.5 py-1 rounded-xl">
