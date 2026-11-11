@@ -10,12 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- PWA Web Manifest Data (Embedded Blob Data dynamic injection) -->
-    <!-- Ganti link ikon di sini -->
-      <link rel="icon" type="image/png" href="./logo.png">
-      <link rel="apple-touch-icon" href="./logo.png">
-      
-      <link rel="manifest" href="./manifest.json">
+    
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
+    <link rel="manifest" href="./manifest.json">
+
     <script>
         tailwind.config = {
             theme: {
@@ -61,14 +60,15 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
-    <!-- Container Utama Desktop Simulated Frame / Mobile View Canvas -->
-    <div class="w-full max-w-md md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative border-x border-slate-200">
+    <!-- Container Utama: Full Width di HP (w-full), max-w-4xl di Tablet/Desktop -->
+    <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200">
         
         <!-- ==================== LOGIN SCREEN ==================== -->
         <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
             <div class="w-full max-w-sm text-center">
-                <div class="w-20 h-20 mb-4 flex items-center justify-center">
-                  <img src="./logo.png" alt="Logo Humas" class="w-full h-full object-contain filter drop-shadow-md">
+                <!-- Logo Di-centerkan dengan mx-auto -->
+                <div class="w-20 h-20 mb-4 flex items-center justify-center mx-auto">
+                    <img src="./logo.png" alt="Logo Humas" class="w-full h-full object-contain filter drop-shadow-md">
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight mb-2">HumasDesk</h1>
                 <p class="text-brand-100 text-sm mb-8">Sistem Manajemen Konten Tim Humas</p>
@@ -118,7 +118,7 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <!-- PWA Install Button (Dynamic) -->
+                        <!-- PWA Install Button -->
                         <button id="installAppBtn" class="hidden px-3 py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
                             <i class="fa-solid fa-download"></i>
                             <span>Install App</span>
@@ -138,7 +138,7 @@
                 </div>
             </header>
 
-            <!-- Main Content Container (Pulled up over Header) -->
+            <!-- Main Content Container -->
             <main class="px-4 -mt-8 space-y-5">
 
                 <!-- AI HARIAN BESAR NASIONAL WIDGET CARD -->
@@ -236,7 +236,7 @@
             </main>
         </div>
 
-        <!-- Floating Add Action Button -->
+        <!-- Floating Add Action Button (Center horizontal di mobile, responsif di desktop) -->
         <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-6 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
             <i class="fa-solid fa-plus"></i>
         </button>
@@ -315,7 +315,6 @@
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
-        // --- STAGES & RESPONSIBILITIES DEFINITION ---
         const STAGES = ['Draft', 'Raw', 'Edit', 'Approval Pimpinan', 'Publish'];
         const PIC_MAP = {
             'Draft': 'Tim Pra-Produksi',
@@ -325,7 +324,6 @@
             'Publish': 'Tim Post-Produksi'
         };
 
-        // --- MASTER DATA HARI BESAR NASIONAL (AI ENGINE SEED) ---
         const NATIONAL_HOLIDAYS = [
             { date: '2026-05-02', name: 'Hari Pendidikan Nasional', idea: 'Carousel apresiasi guru & inovasi pendidikan humas.' },
             { date: '2026-05-20', name: 'Hari Kebangkitan Nasional', idea: 'Video Reels pesan kebangkitan & semangat tim.' },
@@ -337,13 +335,11 @@
             { date: '2026-12-22', name: 'Hari Ibu', idea: 'Dokumentasi apresiasi srikandi tim humas.' }
         ];
 
-        // --- APP STATE ---
         let currentFilter = 'all';
         let contents = [];
         let deferredPrompt = null;
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || '';
 
-        // --- INITIALIZATION ---
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
             setupPWA();
@@ -351,13 +347,11 @@
             setTodayDeadlineDefault();
         });
 
-        // Setup default date input to today
         function setTodayDeadlineDefault() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('inputDeadline').value = today;
         }
 
-        // --- SESSION LOGIC ---
         const loginForm = document.getElementById('loginForm');
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -399,9 +393,7 @@
             }
         }
 
-        // --- PWA INSTALLATION LOGIC ---
         function setupPWA() {
-            // Register dynamic Web Manifest
             const manifest = {
                 name: "HumasDesk App",
                 short_name: "HumasDesk",
@@ -409,7 +401,7 @@
                 display: "standalone",
                 background_color: "#2563eb",
                 theme_color: "#2563eb",
-                icons: [{ src: "https://cdn-icons-png.flaticon.com/512/2983/2983780.png", sizes: "512x512", type: "image/png" }]
+                icons: [{ src: "./logo.png", sizes: "512x512", type: "image/png" }]
             };
             const stringManifest = JSON.stringify(manifest);
             const blob = new Blob([stringManifest], {type: 'application/json'});
@@ -419,7 +411,6 @@
             manifestTag.href = manifestURL;
             document.head.appendChild(manifestTag);
 
-            // Catch beforeinstallprompt
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
@@ -440,7 +431,6 @@
             });
         }
 
-        // --- DATA LOAD & SAVE (LocalStorage + Google Apps Script Ready) ---
         async function loadData() {
             updateSyncStatus();
             if (appsScriptUrl) {
@@ -464,7 +454,6 @@
             if (local) {
                 contents = JSON.parse(local);
             } else {
-                // Seed initial sample data if empty
                 contents = [
                     { id: '1', ide: 'Dokumentasi Rapat Kerja Humas', link: 'https://drive.google.com', jenis: 'Foto', sifat: 'Dokumentasi', deadline: getRelativeDate(1), stage: 'Draft', pic: 'Tim Pra-Produksi' },
                     { id: '2', ide: 'Tips Komunikasi Publik Efektif', link: '', jenis: 'Carousel', sifat: 'Edukasi', deadline: getRelativeDate(3), stage: 'Raw', pic: 'Tim Produksi' },
@@ -516,7 +505,6 @@
             }
         }
 
-        // --- STAGE & CHECKLIST WORKFLOW ---
         function advanceStage(id) {
             const item = contents.find(c => c.id === id);
             if (!item) return;
@@ -530,7 +518,6 @@
             }
         }
 
-        // --- FORM HANDLING ---
         function handleFormSubmit(e) {
             e.preventDefault();
             const newItem = {
@@ -561,7 +548,6 @@
             }
         }
 
-        // --- RENDER DASHBOARD & FILTERS ---
         function setFilter(filterType) {
             currentFilter = filterType;
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -577,7 +563,6 @@
         }
 
         function renderDashboard() {
-            // Compute Metrics
             const total = contents.length;
             const draft = contents.filter(c => c.stage === 'Draft').length;
             const publish = contents.filter(c => c.stage === 'Publish').length;
@@ -588,7 +573,6 @@
             document.getElementById('metricProcess').innerText = process;
             document.getElementById('metricPublish').innerText = publish;
 
-            // Filter logic
             const filtered = contents.filter(item => {
                 if (currentFilter === 'all') return true;
                 
@@ -626,7 +610,6 @@
                 const stageIndex = STAGES.indexOf(item.stage);
                 const isDone = item.stage === 'Publish';
                 
-                // Color badges per stage
                 let stageBadgeClass = 'bg-slate-100 text-slate-700';
                 if (item.stage === 'Draft') stageBadgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
                 if (item.stage === 'Raw') stageBadgeClass = 'bg-blue-100 text-blue-800 border-blue-200';
@@ -634,14 +617,12 @@
                 if (item.stage === 'Approval Pimpinan') stageBadgeClass = 'bg-orange-100 text-orange-800 border-orange-200';
                 if (item.stage === 'Publish') stageBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
 
-                // Badge type icon
                 let iconJenis = 'fa-image';
                 if (item.jenis === 'Video') iconJenis = 'fa-video';
                 if (item.jenis === 'Carousel') iconJenis = 'fa-layer-group';
 
                 const cardHtml = `
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4 hover:shadow-md transition">
-                        <!-- Top Header info -->
                         <div class="flex items-start justify-between gap-2">
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2 flex-wrap">
@@ -662,19 +643,16 @@
                             </button>
                         </div>
 
-                        <!-- Progress Stage Tracker -->
                         <div class="space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
                             <div class="flex justify-between items-center text-[11px] font-semibold">
                                 <span class="text-slate-500">PJ: <strong class="text-brand-700">${item.pic}</strong></span>
                                 <span class="text-slate-400">Tahap ${stageIndex + 1} dari 5</span>
                             </div>
-                            <!-- Bar -->
                             <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
                                 <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${((stageIndex + 1) / 5) * 100}%"></div>
                             </div>
                         </div>
 
-                        <!-- Bottom Footer Info & Checklist Button -->
                         <div class="flex items-center justify-between pt-1 text-xs">
                             <div class="flex items-center gap-3 text-slate-500 text-[11px]">
                                 <span><i class="fa-regular fa-calendar text-brand-600 mr-1"></i>${formatDate(item.deadline)}</span>
@@ -699,12 +677,10 @@
             });
         }
 
-        // --- AI HOLIDAY REMINDER ENGINE ---
         function renderAIWidget() {
             const today = new Date();
             document.getElementById('aiDateToday').innerText = formatDate(today.toISOString().split('T')[0]);
 
-            // Find closest upcoming national holiday
             const upcoming = NATIONAL_HOLIDAYS.map(h => {
                 const hDate = new Date(h.date);
                 return { ...h, diff: hDate - today };
@@ -742,7 +718,6 @@
             document.getElementById('inputSifat').value = 'Edukasi';
         }
 
-        // --- HELPERS & UTILS ---
         function toggleModal(show) {
             const modal = document.getElementById('modalAdd');
             if (show) modal.classList.remove('hidden');
