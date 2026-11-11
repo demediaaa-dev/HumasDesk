@@ -49,27 +49,26 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Animasi Geser (Slide Transition) Antar Tab */
         @keyframes slideFromRight {
-            0% { opacity: 0; transform: translateX(28px); }
+            0% { opacity: 0; transform: translateX(30px); }
             100% { opacity: 1; transform: translateX(0); }
         }
         @keyframes slideFromLeft {
-            0% { opacity: 0; transform: translateX(-28px); }
+            0% { opacity: 0; transform: translateX(-30px); }
             100% { opacity: 1; transform: translateX(0); }
         }
         .animate-slide-right {
-            animation: slideFromRight 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: slideFromRight 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .animate-slide-left {
-            animation: slideFromLeft 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: slideFromLeft 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
     <!-- Container Utama -->
-    <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200 overflow-x-hidden">
+    <div id="mainAppContainer" class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200 overflow-x-hidden">
         
         <!-- ==================== LOGIN SCREEN ==================== -->
         <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
@@ -126,7 +125,10 @@
                     <div class="flex items-center gap-2">
                         <button id="installAppBtn" class="hidden px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
                             <i class="bx bx-download"></i>
-                            <span>Install App</span>
+                            <span>Install</span>
+                        </button>
+                        <button onclick="manualRefresh()" title="Sinkronkan Data" class="w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
+                            <i id="refreshIcon" class="bx bx-refresh text-xl"></i>
                         </button>
                         <button id="logoutBtn" title="Keluar" class="w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
                             <i class="bx bx-log-out text-lg"></i>
@@ -134,14 +136,14 @@
                     </div>
                 </div>
 
-                <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/10 px-3 py-1 rounded-xl border border-white/10">
+                <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/15 px-3 py-1.5 rounded-xl border border-white/10">
                     <span id="syncStatus"><i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (LocalStorage)</span>
-                    <button onclick="promptAppsScriptUrl()" class="underline hover:text-white">Setting URL GAS</button>
+                    <button onclick="promptAppsScriptUrl()" class="underline font-semibold hover:text-white">Setting URL GAS</button>
                 </div>
             </header>
 
-            <!-- Main Dynamic Content Container -->
-            <main class="px-4 -mt-6 space-y-5 flex-1">
+            <!-- Main Dynamic Content Container (Area Swipe Gesture) -->
+            <main id="swipeArea" class="px-4 -mt-6 space-y-5 flex-1 touch-pan-y">
 
                 <!-- ==================== TAB 1: DASHBOARD ==================== -->
                 <div id="tab-dashboard" class="tab-content space-y-4">
@@ -264,7 +266,9 @@
                             <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                 <i class="bx bx-message-square-dots text-brand-600 text-lg"></i> Diskusi Internal Tim
                             </h3>
-                            <span class="text-[11px] text-slate-400">Live Chat</span>
+                            <button onclick="loadChats()" class="text-[11px] text-brand-600 font-semibold hover:underline flex items-center gap-1">
+                                <i class="bx bx-refresh"></i> Muat Ulang
+                            </button>
                         </div>
 
                         <div id="chatMessagesList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
@@ -302,29 +306,25 @@
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- ==================== BOTTOM NAVIGATION BAR (MINIMALIS TANPA TEKS + ACTIVE FILL BIRU) ==================== -->
+        <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
                 
-                <!-- Tab 1: Dashboard -->
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-alt-2" data-solid="bxs-home-alt-2" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bxs-home-alt-2 text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
                 
-                <!-- Tab 2: Data Konten -->
                 <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-folder" data-solid="bxs-folder" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-folder text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
                 
-                <!-- Tab 3: Pesan -->
                 <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-chat" data-solid="bxs-chat" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-chat text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
                 
-                <!-- Tab 4: Jadwal -->
                 <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-calendar" data-solid="bxs-calendar" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-calendar text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
@@ -429,7 +429,7 @@
         let messages = [];
 
         // 📌 PASTEKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI ANTARA TANDA PETIK DI BAWAH INI
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzKnt7IS1x15SRGXsDJ1CIw8xdSgmIw1UBMFEiVEYP-6_UfXiEQtAR_BxUr-XMy2QMD/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzG34DCVmaXIhzAUJpujYn5-mZ6ZhGyqYNFZKVCb9MmmC3PQzugIARPHYuuiAQosFly/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -437,9 +437,46 @@
             renderAIWidget();
             renderHolidaysTab();
             setTodayDeadlineDefault();
+            initSwipeGesture();
         });
 
-        // Switch Tab dengan Ikon Fill Biru & Animasi Geser (Slide)
+        // ==================== SWIPE LEFT / RIGHT GESTURE ====================
+        function initSwipeGesture() {
+            const swipeArea = document.getElementById('appScreen');
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            swipeArea.addEventListener('touchstart', (e) => {
+                // Abaikan swipe jika user sedang menggeser tabel horizontal
+                if (e.target.closest('.overflow-x-auto')) return;
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            swipeArea.addEventListener('touchend', (e) => {
+                if (touchStartX === 0) return;
+                const touchEndX = e.changedTouches[0].screenX;
+                const touchEndY = e.changedTouches[0].screenY;
+
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+
+                // Pastikan gerakan dominan horizontal (> 60px) dan bukan scroll vertikal
+                if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+                    const currentIndex = TAB_ORDER.indexOf(currentTab);
+                    if (diffX < 0 && currentIndex < TAB_ORDER.length - 1) {
+                        // Geser ke Kiri -> Pindah ke Tab Berikutnya
+                        switchTab(TAB_ORDER[currentIndex + 1]);
+                    } else if (diffX > 0 && currentIndex > 0) {
+                        // Geser ke Kanan -> Pindah ke Tab Sebelumnya
+                        switchTab(TAB_ORDER[currentIndex - 1]);
+                    }
+                }
+                touchStartX = 0;
+                touchStartY = 0;
+            }, { passive: true });
+        }
+
         function switchTab(tabName) {
             if (tabName === currentTab) return;
 
@@ -447,13 +484,11 @@
             const newIndex = TAB_ORDER.indexOf(tabName);
             const slideAnimClass = newIndex > oldIndex ? 'animate-slide-right' : 'animate-slide-left';
 
-            // Sembunyikan semua tab dan bersihkan kelas animasi
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('animate-slide-right', 'animate-slide-left');
             });
 
-            // Reset semua tombol navigasi bawah ke mode regular abu-abu
             TAB_ORDER.forEach(n => {
                 const btn = document.getElementById(`nav-${n}`);
                 const icon = btn.querySelector('i');
@@ -466,13 +501,11 @@
                 if (dot) dot.classList.add('hidden');
             });
 
-            // Tampilkan tab target dengan animasi geser
             const targetTab = document.getElementById(`tab-${tabName}`);
             targetTab.classList.remove('hidden');
-            void targetTab.offsetWidth; // Trigger reflow agar animasi selalu berjalan
+            void targetTab.offsetWidth;
             targetTab.classList.add(slideAnimClass);
 
-            // Set tombol navigasi aktif menjadi Solid Fill Biru
             const activeNav = document.getElementById(`nav-${tabName}`);
             const activeIcon = activeNav.querySelector('i');
             const activeDot = document.getElementById(`dot-${tabName}`);
@@ -498,10 +531,10 @@
 
             if (u === 'humas' && p === '1234') {
                 localStorage.setItem('HUMAS_SESSION', JSON.stringify({ username: u, name: 'Tim Humas Main' }));
-                showToast('Login berhasil!', 'success');
+                showToast('Login berhasil!');
                 checkSession();
             } else {
-                showToast('Username atau password salah!', 'error');
+                showToast('Username atau password salah!');
             }
         });
 
@@ -528,13 +561,41 @@
             }
         }
 
-        // Chat Feature
+        function manualRefresh() {
+            const icon = document.getElementById('refreshIcon');
+            icon.classList.add('animate-spin');
+            loadData();
+            loadChats();
+            setTimeout(() => icon.classList.remove('animate-spin'), 800);
+        }
+
+        // ==================== DATABASE SYNC (FIXED CORS) ====================
+        async function postToGas(payload) {
+            if (!appsScriptUrl) return false;
+            try {
+                // Menggunakan text/plain agar Google Apps Script tidak terblokir CORS preflight
+                const response = await fetch(appsScriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const resJson = await response.json();
+                return resJson.status === 'success' || resJson.status === 'deleted';
+            } catch (err) {
+                console.error('GAS POST Error:', err);
+                return false;
+            }
+        }
+
         async function loadChats() {
             if (appsScriptUrl) {
                 try {
-                    const res = await fetch(`${appsScriptUrl}?action=getChats`);
+                    const res = await fetch(`${appsScriptUrl}?action=getChats&t=${Date.now()}`);
                     const data = await res.json();
-                    messages = data;
+                    if (Array.isArray(data)) {
+                        messages = data;
+                        localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
+                    }
                 } catch (e) {
                     loadLocalChats();
                 }
@@ -546,10 +607,7 @@
 
         function loadLocalChats() {
             const localMsgs = localStorage.getItem('HUMAS_CHAT_DATA');
-            messages = localMsgs ? JSON.parse(localMsgs) : [
-                { sender: 'Budi (Pra-Prod)', text: 'Konten Hari Pahlawan drafnya sudah siap ya.', time: '10:15' },
-                { sender: 'Siti (Post-Prod)', text: 'Siap, langsung saya bantu edit.', time: '10:18' }
-            ];
+            messages = localMsgs ? JSON.parse(localMsgs) : [];
         }
 
         async function handleSendChat(e) {
@@ -570,20 +628,18 @@
             renderChats();
 
             if (appsScriptUrl) {
-                try {
-                    await fetch(appsScriptUrl, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(newMsg)
-                    });
-                } catch (err) {}
+                const ok = await postToGas(newMsg);
+                if (ok) showToast('Pesan terkirim ke Database');
             }
         }
 
         function renderChats() {
             const container = document.getElementById('chatMessagesList');
             container.innerHTML = '';
+            if (messages.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-slate-400 py-10">Belum ada diskusi tim. Mulai percakapan!</p>`;
+                return;
+            }
             messages.forEach(m => {
                 container.innerHTML += `
                     <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
@@ -598,16 +654,20 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Master Data Content Management
         async function loadData() {
             updateSyncStatus();
             if (appsScriptUrl) {
                 try {
-                    const res = await fetch(appsScriptUrl);
+                    const res = await fetch(`${appsScriptUrl}?t=${Date.now()}`);
                     const data = await res.json();
-                    contents = data;
-                    showToast('Data diperbarui dari Spreadsheet', 'success');
+                    if (Array.isArray(data)) {
+                        contents = data;
+                        saveDataLocal();
+                        updateSyncStatus(true);
+                    }
                 } catch (err) {
+                    console.error('GAS GET Error:', err);
+                    updateSyncStatus(false);
                     loadLocalData();
                 }
             } else {
@@ -619,16 +679,7 @@
 
         function loadLocalData() {
             const local = localStorage.getItem('HUMAS_KONTEN_DATA');
-            if (local) {
-                contents = JSON.parse(local);
-            } else {
-                contents = [
-                    { id: '1', ide: 'Dokumentasi Rapat Kerja Humas', link: 'https://drive.google.com', jenis: 'Foto', sifat: 'Dokumentasi', deadline: getRelativeDate(1), stage: 'Draft', pic: 'Tim Pra-Produksi' },
-                    { id: '2', ide: 'Tips Komunikasi Publik Efektif', link: '', jenis: 'Carousel', sifat: 'Edukasi', deadline: getRelativeDate(3), stage: 'Raw', pic: 'Tim Produksi' },
-                    { id: '3', ide: 'Reels Fun Friday Tim Humas', link: '', jenis: 'Video', sifat: 'Hiburan', deadline: getRelativeDate(-2), stage: 'Publish', pic: 'Tim Post-Produksi' }
-                ];
-                saveDataLocal();
-            }
+            contents = local ? JSON.parse(local) : [];
         }
 
         function saveDataLocal() {
@@ -641,16 +692,14 @@
             renderMatrixTable();
 
             if (appsScriptUrl) {
-                try {
-                    await fetch(appsScriptUrl, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(item)
-                    });
-                    showToast('Tersinkron ke Spreadsheet', 'success');
-                } catch (e) {
-                    showToast('Tersimpan Lokal (Gagal sync)', 'info');
+                showToast('Menyimpan ke Spreadsheet...');
+                const ok = await postToGas(item);
+                if (ok) {
+                    showToast('Berhasil masuk Database!');
+                    updateSyncStatus(true);
+                } else {
+                    showToast('Gagal kirim ke GAS! Cek izin deploy Anyone.');
+                    updateSyncStatus(false);
                 }
             }
         }
@@ -673,7 +722,6 @@
             toggleModal(false);
             e.target.reset();
             setTodayDeadlineDefault();
-            showToast('Konten ditambahkan!', 'success');
         }
 
         function advanceStage(id) {
@@ -684,17 +732,19 @@
                 item.stage = STAGES[idx + 1];
                 item.pic = PIC_MAP[item.stage];
                 syncToBackend(item);
-                showToast(`Status: ${item.stage}`, 'success');
             }
         }
 
-        function deleteItem(id) {
+        async function deleteItem(id) {
             if (confirm('Hapus konten ini?')) {
                 contents = contents.filter(c => c.id !== id);
                 saveDataLocal();
                 renderDashboard();
                 renderMatrixTable();
-                showToast('Konten dihapus', 'info');
+                if (appsScriptUrl) {
+                    await postToGas({ action: 'delete', id: id });
+                    showToast('Dihapus dari Database');
+                }
             }
         }
 
@@ -763,7 +813,7 @@
                 if (item.jenis === 'Video') iconJenis = 'bx-video';
                 if (item.jenis === 'Carousel') iconJenis = 'bx-slideshow';
 
-                const cardHtml = `
+                listEl.innerHTML += `
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4 hover:shadow-md transition">
                         <div class="flex items-start justify-between gap-2">
                             <div class="space-y-1">
@@ -815,7 +865,6 @@
                         </div>
                     </div>
                 `;
-                listEl.innerHTML += cardHtml;
             });
         }
 
@@ -869,12 +918,14 @@
             });
         }
 
-        function updateSyncStatus() {
+        function updateSyncStatus(isConnected = null) {
             const statusEl = document.getElementById('syncStatus');
-            if (appsScriptUrl) {
-                statusEl.innerHTML = `<i class="bx bx-cloud-download text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
+            if (!appsScriptUrl) {
+                statusEl.innerHTML = `<i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (URL Belum Diisi)`;
+            } else if (isConnected === false) {
+                statusEl.innerHTML = `<i class="bx bx-error-circle text-rose-300 mr-1"></i> Gagal Konek GAS (Cek Izin Deploy)`;
             } else {
-                statusEl.innerHTML = `<i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (LocalStorage)`;
+                statusEl.innerHTML = `<i class="bx bx-cloud-check text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
             }
         }
 
@@ -894,11 +945,10 @@
         }
 
         function formatDate(d) {
-            return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-        }
-
-        function getRelativeDate(o) {
-            const d = new Date(); d.setDate(d.getDate() + o); return d.toISOString().split('T')[0];
+            if (!d) return '-';
+            const parsed = new Date(d);
+            if (isNaN(parsed)) return d;
+            return parsed.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
         }
 
         function showToast(msg) {
