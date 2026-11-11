@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HumasDesk - App Pencatatan Konten</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PWA Web Manifest Data (Embedded Blob Data dynamic injection) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
+
+    <!-- Container Utama Desktop Simulated Frame / Mobile View Canvas -->
+    <div class="w-full max-w-md md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative border-x border-slate-200">
+        
+        <!-- ==================== LOGIN SCREEN ==================== -->
+        <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
+            <div class="w-full max-w-sm text-center">
+                <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl mx-auto flex items-center justify-center mb-6 border border-white/20 shadow-xl">
+                    <i class="fa-solid fa-bullhorn text-4xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold tracking-tight mb-2">HumasFlow</h1>
+                <p class="text-brand-100 text-sm mb-8">Sistem Manajemen Konten Tim Humas</p>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl space-y-4 text-left">
+                    <div>
+                        <label class="block text-xs font-semibold text-brand-100 uppercase tracking-wider mb-1">Username</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-4 top-3.5 text-brand-200"></i>
+                            <input type="text" id="usernameInput" required placeholder="Masukkan username" value="humas" 
+                                class="w-full pl-11 pr-4 py-3 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-brand-200 focus:outline-none focus:ring-2 focus:ring-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-brand-100 uppercase tracking-wider mb-1">Password</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-brand-200"></i>
+                            <input type="password" id="passwordInput" required placeholder="Masukkan password" value="1234" 
+                                class="w-full pl-11 pr-4 py-3 bg-white/20 border border-white/30 rounded-2xl text-white placeholder-brand-200 focus:outline-none focus:ring-2 focus:ring-white">
+                        </div>
+                    </div>
+                    <button type="submit" 
+                        class="w-full py-3.5 bg-white text-brand-700 font-bold rounded-2xl shadow-lg hover:bg-brand-50 transition active:scale-95 text-center flex items-center justify-center gap-2">
+                        <span>Masuk Aplikasi</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <p class="text-xs text-center text-brand-200 mt-2">Default: username <b>humas</b> | pass <b>1234</b></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== MAIN APP DASHBOARD ==================== -->
+        <div id="appScreen" class="hidden flex-1 flex flex-col pb-24">
+            
+            <!-- App Header -->
+            <header class="bg-brand-600 text-white px-6 pt-8 pb-14 rounded-b-[2.5rem] shadow-lg relative">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center font-bold text-xl border border-white/30 shadow">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-brand-100">Selamat datang,</p>
+                            <h2 class="text-lg font-bold leading-tight" id="userDisplayName">Tim Humas</h2>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- PWA Install Button (Dynamic) -->
+                        <button id="installAppBtn" class="hidden px-3 py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Install App</span>
+                        </button>
+                        
+                        <!-- Logout Button -->
+                        <button id="logoutBtn" title="Keluar" class="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
+                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Config Apps Script Indicator -->
+                <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/10 px-3 py-1.5 rounded-xl border border-white/10">
+                    <span id="syncStatus"><i class="fa-solid fa-database text-amber-300 mr-1"></i> Mode Offline (LocalStorage)</span>
+                    <button onclick="promptAppsScriptUrl()" class="underline hover:text-white">Setting URL GAS</button>
+                </div>
+            </header>
+
+            <!-- Main Content Container (Pulled up over Header) -->
+            <main class="px-4 -mt-8 space-y-5">
+
+                <!-- AI HARIAN BESAR NASIONAL WIDGET CARD -->
+                <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden border border-slate-700">
+                    <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl font-black pointer-events-none">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-500/30 border border-brand-400/30 rounded-full text-xs font-semibold text-brand-200">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> AI Humas Reminder
+                        </span>
+                        <span class="text-[11px] text-slate-400" id="aiDateToday">Hari Ini</span>
+                    </div>
+
+                    <div id="aiHolidayContent">
+                        <!-- AI content injected here -->
+                    </div>
+                </div>
+
+                <!-- DASHBOARD METRICS CARDS -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-medium">Total Konten</span>
+                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center">
+                                <i class="fa-solid fa-layer-group text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800" id="metricTotal">0</h3>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-medium">Ide & Draft</span>
+                            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="fa-solid fa-pen-ruler text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-amber-600" id="metricDraft">0</h3>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-medium">Dalam Proses</span>
+                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                                <i class="fa-solid fa-spinner text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-indigo-600" id="metricProcess">0</h3>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                        <div class="flex items-center justify-between text-slate-400 mb-2">
+                            <span class="text-xs font-medium">Publish</span>
+                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-circle-check text-sm"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-emerald-600" id="metricPublish">0</h3>
+                    </div>
+                </div>
+
+                <!-- FILTER TABS & SEARCH -->
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-brand-600"></i> Daftar Konten Tim
+                        </h3>
+                        <span class="text-xs text-slate-400" id="countFiltered">0 konten</span>
+                    </div>
+
+                    <!-- Horizontal Scrollable Pill Tabs -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+                        <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-brand-600 text-white shadow-sm whitespace-nowrap">Semua</button>
+                        <button onclick="setFilter('month')" id="filter-month" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Bulan Ini</button>
+                        <button onclick="setFilter('week')" id="filter-week" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Minggu Ini</button>
+                        <button onclick="setFilter('upcoming')" id="filter-upcoming" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Akan Datang ⏰</button>
+                    </div>
+                </div>
+
+                <!-- CONTENT LIST / TABLE -->
+                <div id="contentList" class="space-y-3">
+                    <!-- Dynamic Content Cards Injected Here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
+                    <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-regular fa-folder-open text-2xl"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-700 text-sm">Belum Ada Konten</h4>
+                    <p class="text-xs text-slate-400 mt-1">Tambahkan ide konten baru tim humas sekarang!</p>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- Floating Add Action Button -->
+        <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-6 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+
+        <!-- ==================== MODAL TAMBAH KONTEN ==================== -->
+        <div id="modalAdd" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4 transition-opacity">
+            <div class="bg-white w-full max-w-lg rounded-t-[2.5rem] md:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-square-plus text-brand-600"></i> Tambah Konten Humas
+                    </h3>
+                    <button onclick="toggleModal(false)" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <form id="contentForm" onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs font-medium">
+                    <div>
+                        <label class="block text-slate-600 uppercase tracking-wider mb-1">Ide Konten / Judul *</label>
+                        <input type="text" id="inputIde" required placeholder="Contoh: Liputan Pelantikan Pejabat Baru" 
+                            class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-600 uppercase tracking-wider mb-1">Link Referensi (Drive/IG/Tiktok)</label>
+                        <input type="url" id="inputLink" placeholder="https://instagram.com/..." 
+                            class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-600 uppercase tracking-wider mb-1">Jenis Konten *</label>
+                            <select id="inputJenis" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
+                                <option value="Foto">Foto / Design</option>
+                                <option value="Video">Video Reels/Shorts</option>
+                                <option value="Carousel">Carousel Microblog</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-600 uppercase tracking-wider mb-1">Sifat Konten *</label>
+                            <select id="inputSifat" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
+                                <option value="Hiburan">Hiburan / Soft</option>
+                                <option value="Edukasi">Edukasi / Info</option>
+                                <option value="Dokumentasi">Dokumentasi Liputan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-600 uppercase tracking-wider mb-1">Deadline Posting *</label>
+                        <input type="date" id="inputDeadline" required 
+                            class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
+                    </div>
+
+                    <div class="bg-blue-50 p-3 rounded-2xl text-[11px] text-brand-700 flex items-start gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                        <span>Konten baru akan otomatis dimulai dari tahapan <b>Draft</b> yang ditangani oleh <b>Tim Pra-Produksi</b>.</span>
+                    </div>
+
+                    <div class="pt-2 flex gap-3">
+                        <button type="button" onclick="toggleModal(false)" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl transition">Batal</button>
+                        <button type="submit" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg transition">Simpan Konten</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-[-150%] transition-transform duration-300 text-xs">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMsg">Pesan Toast</span>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // --- STAGES & RESPONSIBILITIES DEFINITION ---
+        const STAGES = ['Draft', 'Raw', 'Edit', 'Approval Pimpinan', 'Publish'];
+        const PIC_MAP = {
+            'Draft': 'Tim Pra-Produksi',
+            'Raw': 'Tim Produksi',
+            'Edit': 'Tim Post-Produksi',
+            'Approval Pimpinan': 'Tim Post-Produksi',
+            'Publish': 'Tim Post-Produksi'
+        };
+
+        // --- MASTER DATA HARI BESAR NASIONAL (AI ENGINE SEED) ---
+        const NATIONAL_HOLIDAYS = [
+            { date: '2026-05-02', name: 'Hari Pendidikan Nasional', idea: 'Carousel apresiasi guru & inovasi pendidikan humas.' },
+            { date: '2026-05-20', name: 'Hari Kebangkitan Nasional', idea: 'Video Reels pesan kebangkitan & semangat tim.' },
+            { date: '2026-06-01', name: 'Hari Lahir Pancasila', idea: 'Infografis nilai-nilai Pancasila dalam pelayanan.' },
+            { date: '2026-08-17', name: 'HUT Kemerdekaan RI', idea: 'Video Dokumentasi keseruan lomba internal & upacara.' },
+            { date: '2026-10-28', name: 'Hari Sumpah Pemuda', idea: 'Foto & Quote karya pemuda inspiratif humas.' },
+            { date: '2026-11-10', name: 'Hari Pahlawan', idea: 'Video pendek mengenang jasa pahlawan lokal.' },
+            { date: '2026-11-25', name: 'Hari Guru Nasional', idea: 'Konten ucapan edukatif & ucapan hangat.' },
+            { date: '2026-12-22', name: 'Hari Ibu', idea: 'Dokumentasi apresiasi srikandi tim humas.' }
+        ];
+
+        // --- APP STATE ---
+        let currentFilter = 'all';
+        let contents = [];
+        let deferredPrompt = null;
+        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || '';
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+            setupPWA();
+            renderAIWidget();
+            setTodayDeadlineDefault();
+        });
+
+        // Setup default date input to today
+        function setTodayDeadlineDefault() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inputDeadline').value = today;
+        }
+
+        // --- SESSION LOGIC ---
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const u = document.getElementById('usernameInput').value;
+            const p = document.getElementById('passwordInput').value;
+
+            if (u === 'humas' && p === '1234') {
+                const sessionData = { username: u, name: 'Tim Humas Main', loggedInAt: new Date().getTime() };
+                localStorage.setItem('HUMAS_SESSION', JSON.stringify(sessionData));
+                showToast('Login berhasil!', 'success');
+                checkSession();
+            } else {
+                showToast('Username atau password salah!', 'error');
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('HUMAS_SESSION');
+            showToast('Anda telah logout', 'info');
+            checkSession();
+        });
+
+        function checkSession() {
+            const session = JSON.parse(localStorage.getItem('HUMAS_SESSION'));
+            const loginScreen = document.getElementById('loginScreen');
+            const appScreen = document.getElementById('appScreen');
+            const openModalBtn = document.getElementById('openModalBtn');
+
+            if (session) {
+                loginScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                openModalBtn.classList.remove('hidden');
+                document.getElementById('userDisplayName').innerText = session.name;
+                loadData();
+            } else {
+                loginScreen.classList.remove('hidden');
+                appScreen.classList.add('hidden');
+                openModalBtn.classList.add('hidden');
+            }
+        }
+
+        // --- PWA INSTALLATION LOGIC ---
+        function setupPWA() {
+            // Register dynamic Web Manifest
+            const manifest = {
+                name: "HumasFlow App",
+                short_name: "HumasFlow",
+                start_url: ".",
+                display: "standalone",
+                background_color: "#2563eb",
+                theme_color: "#2563eb",
+                icons: [{ src: "https://cdn-icons-png.flaticon.com/512/2983/2983780.png", sizes: "512x512", type: "image/png" }]
+            };
+            const stringManifest = JSON.stringify(manifest);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            const manifestTag = document.createElement('link');
+            manifestTag.rel = 'manifest';
+            manifestTag.href = manifestURL;
+            document.head.appendChild(manifestTag);
+
+            // Catch beforeinstallprompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const installBtn = document.getElementById('installAppBtn');
+                installBtn.classList.remove('hidden');
+
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            showToast('Aplikasi berhasil diinstall!', 'success');
+                        }
+                        deferredPrompt = null;
+                        installBtn.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // --- DATA LOAD & SAVE (LocalStorage + Google Apps Script Ready) ---
+        async function loadData() {
+            updateSyncStatus();
+            if (appsScriptUrl) {
+                try {
+                    const res = await fetch(appsScriptUrl);
+                    const data = await res.json();
+                    contents = data;
+                    showToast('Data diperbarui dari Spreadsheet', 'success');
+                } catch (err) {
+                    console.warn('Gagal fetch AppsScript, memuat dari local', err);
+                    loadLocalData();
+                }
+            } else {
+                loadLocalData();
+            }
+            renderDashboard();
+        }
+
+        function loadLocalData() {
+            const local = localStorage.getItem('HUMAS_KONTEN_DATA');
+            if (local) {
+                contents = JSON.parse(local);
+            } else {
+                // Seed initial sample data if empty
+                contents = [
+                    { id: '1', ide: 'Dokumentasi Rapat Kerja Humas', link: 'https://drive.google.com', jenis: 'Foto', sifat: 'Dokumentasi', deadline: getRelativeDate(1), stage: 'Draft', pic: 'Tim Pra-Produksi' },
+                    { id: '2', ide: 'Tips Komunikasi Publik Efektif', link: '', jenis: 'Carousel', sifat: 'Edukasi', deadline: getRelativeDate(3), stage: 'Raw', pic: 'Tim Produksi' },
+                    { id: '3', ide: 'Reels Fun Friday Tim Humas', link: '', jenis: 'Video', sifat: 'Hiburan', deadline: getRelativeDate(-2), stage: 'Publish', pic: 'Tim Post-Produksi' }
+                ];
+                saveDataLocal();
+            }
+        }
+
+        function saveDataLocal() {
+            localStorage.setItem('HUMAS_KONTEN_DATA', JSON.stringify(contents));
+        }
+
+        async function syncToBackend(item, isNew = false) {
+            saveDataLocal();
+            renderDashboard();
+
+            if (appsScriptUrl) {
+                try {
+                    await fetch(appsScriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(item)
+                    });
+                    showToast('Tersinkron dengan Spreadsheet', 'success');
+                } catch (e) {
+                    showToast('Tersimpan di Lokal (GAS error)', 'info');
+                }
+            }
+        }
+
+        function updateSyncStatus() {
+            const statusEl = document.getElementById('syncStatus');
+            if (appsScriptUrl) {
+                statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
+            } else {
+                statusEl.innerHTML = `<i class="fa-solid fa-database text-amber-300 mr-1"></i> Mode Offline (LocalStorage)`;
+            }
+        }
+
+        function promptAppsScriptUrl() {
+            const current = appsScriptUrl || '';
+            const newUrl = prompt('Masukkan Web App URL Google Apps Script Anda:', current);
+            if (newUrl !== null) {
+                appsScriptUrl = newUrl.trim();
+                localStorage.setItem('HUMAS_GAS_URL', appsScriptUrl);
+                loadData();
+            }
+        }
+
+        // --- STAGE & CHECKLIST WORKFLOW ---
+        function advanceStage(id) {
+            const item = contents.find(c => c.id === id);
+            if (!item) return;
+
+            const currentIndex = STAGES.indexOf(item.stage);
+            if (currentIndex < STAGES.length - 1) {
+                item.stage = STAGES[currentIndex + 1];
+                item.pic = PIC_MAP[item.stage];
+                showToast(`Konten naik ke tahap: ${item.stage}`, 'success');
+                syncToBackend(item);
+            }
+        }
+
+        // --- FORM HANDLING ---
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const newItem = {
+                id: 'KONTEN-' + Date.now(),
+                ide: document.getElementById('inputIde').value,
+                link: document.getElementById('inputLink').value,
+                jenis: document.getElementById('inputJenis').value,
+                sifat: document.getElementById('inputSifat').value,
+                deadline: document.getElementById('inputDeadline').value,
+                stage: 'Draft',
+                pic: PIC_MAP['Draft']
+            };
+
+            contents.unshift(newItem);
+            syncToBackend(newItem, true);
+            toggleModal(false);
+            e.target.reset();
+            setTodayDeadlineDefault();
+            showToast('Konten berhasil ditambahkan!', 'success');
+        }
+
+        function deleteItem(id) {
+            if (confirm('Yakin ingin menghapus konten ini?')) {
+                contents = contents.filter(c => c.id !== id);
+                saveDataLocal();
+                renderDashboard();
+                showToast('Konten telah dihapus', 'info');
+            }
+        }
+
+        // --- RENDER DASHBOARD & FILTERS ---
+        function setFilter(filterType) {
+            currentFilter = filterType;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            const activeBtn = document.getElementById(`filter-${filterType}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+                activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+            }
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            // Compute Metrics
+            const total = contents.length;
+            const draft = contents.filter(c => c.stage === 'Draft').length;
+            const publish = contents.filter(c => c.stage === 'Publish').length;
+            const process = total - (draft + publish);
+
+            document.getElementById('metricTotal').innerText = total;
+            document.getElementById('metricDraft').innerText = draft;
+            document.getElementById('metricProcess').innerText = process;
+            document.getElementById('metricPublish').innerText = publish;
+
+            // Filter logic
+            const filtered = contents.filter(item => {
+                if (currentFilter === 'all') return true;
+                
+                const itemDate = new Date(item.deadline);
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                if (currentFilter === 'month') {
+                    return itemDate.getMonth() === today.getMonth() && itemDate.getFullYear() === today.getFullYear();
+                }
+                if (currentFilter === 'week') {
+                    const nextWeek = new Date(today);
+                    nextWeek.setDate(today.getDate() + 7);
+                    return itemDate >= today && itemDate <= nextWeek;
+                }
+                if (currentFilter === 'upcoming') {
+                    return itemDate >= today && item.stage !== 'Publish';
+                }
+                return true;
+            });
+
+            document.getElementById('countFiltered').innerText = `${filtered.length} konten`;
+
+            const listEl = document.getElementById('contentList');
+            const emptyEl = document.getElementById('emptyState');
+            listEl.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+
+            filtered.forEach(item => {
+                const stageIndex = STAGES.indexOf(item.stage);
+                const isDone = item.stage === 'Publish';
+                
+                // Color badges per stage
+                let stageBadgeClass = 'bg-slate-100 text-slate-700';
+                if (item.stage === 'Draft') stageBadgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
+                if (item.stage === 'Raw') stageBadgeClass = 'bg-blue-100 text-blue-800 border-blue-200';
+                if (item.stage === 'Edit') stageBadgeClass = 'bg-purple-100 text-purple-800 border-purple-200';
+                if (item.stage === 'Approval Pimpinan') stageBadgeClass = 'bg-orange-100 text-orange-800 border-orange-200';
+                if (item.stage === 'Publish') stageBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+
+                // Badge type icon
+                let iconJenis = 'fa-image';
+                if (item.jenis === 'Video') iconJenis = 'fa-video';
+                if (item.jenis === 'Carousel') iconJenis = 'fa-layer-group';
+
+                const cardHtml = `
+                    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4 hover:shadow-md transition">
+                        <!-- Top Header info -->
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-xl border ${stageBadgeClass}">
+                                        ${item.stage}
+                                    </span>
+                                    <span class="text-[11px] text-slate-500 font-medium bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-100">
+                                        <i class="fa-solid ${iconJenis} text-brand-600 mr-1"></i> ${item.jenis}
+                                    </span>
+                                    <span class="text-[11px] text-slate-500 font-medium bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-100">
+                                        ${item.sifat}
+                                    </span>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-base leading-snug pt-1">${item.ide}</h4>
+                            </div>
+                            <button onclick="deleteItem('${item.id}')" class="text-slate-300 hover:text-rose-500 p-1 transition">
+                                <i class="fa-regular fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Progress Stage Tracker -->
+                        <div class="space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                            <div class="flex justify-between items-center text-[11px] font-semibold">
+                                <span class="text-slate-500">PJ: <strong class="text-brand-700">${item.pic}</strong></span>
+                                <span class="text-slate-400">Tahap ${stageIndex + 1} dari 5</span>
+                            </div>
+                            <!-- Bar -->
+                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
+                                <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${((stageIndex + 1) / 5) * 100}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Footer Info & Checklist Button -->
+                        <div class="flex items-center justify-between pt-1 text-xs">
+                            <div class="flex items-center gap-3 text-slate-500 text-[11px]">
+                                <span><i class="fa-regular fa-calendar text-brand-600 mr-1"></i>${formatDate(item.deadline)}</span>
+                                ${item.link ? `<a href="${item.link}" target="_blank" class="text-brand-600 underline font-semibold flex items-center gap-1"><i class="fa-solid fa-link text-[10px]"></i> Ref</a>` : ''}
+                            </div>
+
+                            ${!isDone ? `
+                                <button onclick="advanceStage('${item.id}')" 
+                                    class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-xl font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                                    <i class="fa-solid fa-circle-check text-brand-600"></i>
+                                    <span>Lanjut Tahap</span>
+                                </button>
+                            ` : `
+                                <span class="text-emerald-600 font-bold flex items-center gap-1 text-[11px] bg-emerald-50 px-2.5 py-1 rounded-xl">
+                                    <i class="fa-solid fa-check-double"></i> Terpublikasi
+                                </span>
+                            `}
+                        </div>
+                    </div>
+                `;
+                listEl.innerHTML += cardHtml;
+            });
+        }
+
+        // --- AI HOLIDAY REMINDER ENGINE ---
+        function renderAIWidget() {
+            const today = new Date();
+            document.getElementById('aiDateToday').innerText = formatDate(today.toISOString().split('T')[0]);
+
+            // Find closest upcoming national holiday
+            const upcoming = NATIONAL_HOLIDAYS.map(h => {
+                const hDate = new Date(h.date);
+                return { ...h, diff: hDate - today };
+            }).filter(h => h.diff >= -86400000).sort((a,b) => a.diff - b.diff)[0] || NATIONAL_HOLIDAYS[0];
+
+            const daysLeft = Math.ceil(upcoming.diff / (1000 * 60 * 60 * 24));
+            let daysLabel = daysLeft === 0 ? 'Hari Ini!' : `${daysLeft} Hari Lagi`;
+
+            const widgetEl = document.getElementById('aiHolidayContent');
+            widgetEl.innerHTML = `
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-lg text-amber-300 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-day"></i> ${upcoming.name}
+                        </h4>
+                        <span class="px-2.5 py-0.5 bg-amber-400/20 text-amber-300 font-bold text-[11px] rounded-lg border border-amber-400/30">
+                            ${daysLabel} (${formatDate(upcoming.date)})
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong class="text-white">Rekomendasi Tema AI:</strong> "${upcoming.idea}"
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="applyAiIdea('${upcoming.name}', '${upcoming.idea}')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold text-white transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus text-amber-300"></i> Buat Konten Dari Ide Ini
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function applyAiIdea(name, idea) {
+            toggleModal(true);
+            document.getElementById('inputIde').value = `[Hari Besar] ${name} - ${idea}`;
+            document.getElementById('inputSifat').value = 'Edukasi';
+        }
+
+        // --- HELPERS & UTILS ---
+        function toggleModal(show) {
+            const modal = document.getElementById('modalAdd');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return new Date(dateStr).toLocaleDateString('id-ID', options);
+        }
+
+        function getRelativeDate(daysOffset) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysOffset);
+            return d.toISOString().split('T')[0];
+        }
+
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = msg;
+            if (type === 'success') toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
+            else if (type === 'error') toastIcon.className = 'fa-solid fa-circle-xmark text-rose-400 text-base';
+            else toastIcon.className = 'fa-solid fa-circle-info text-sky-400 text-base';
+
+            toast.classList.remove('translate-y-[-150%]');
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-150%]');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
