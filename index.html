@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HumasDesk - App Pencatatan Konten</title>
     <!-- Tailwind CSS -->
@@ -11,7 +11,6 @@
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Link Ikon & Manifest PWA -->
     <link rel="icon" type="image/png" href="./logo.png">
     <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="./manifest.json">
@@ -42,39 +41,29 @@
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        /* Custom Smooth Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
-    <!-- Container Utama: Full Width di HP (w-full), max-w-4xl di Tablet/Desktop -->
+    <!-- Container Utama: Full Width di HP, Max-width di Desktop -->
     <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200">
         
         <!-- ==================== LOGIN SCREEN ==================== -->
         <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
             <div class="w-full max-w-sm text-center">
-                <!-- Logo Di-centerkan dengan mx-auto -->
                 <div class="w-20 h-20 mb-4 flex items-center justify-center mx-auto">
                     <img src="./logo.png" alt="Logo Humas" class="w-full h-full object-contain filter drop-shadow-md" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2983/2983780.png';">
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight mb-2">HumasDesk</h1>
                 <p class="text-brand-100 text-sm mb-8">Sistem Manajemen Konten Tim Humas</p>
 
-                <!-- Login Form -->
                 <form id="loginForm" class="bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-2xl space-y-4 text-left">
                     <div>
                         <label class="block text-xs font-semibold text-brand-100 uppercase tracking-wider mb-1">Username</label>
@@ -97,148 +86,176 @@
                         <span>Masuk Aplikasi</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
+                    <p class="text-xs text-center text-brand-200 mt-2">Default: username <b>humas</b> | pass <b>1234</b></p>
                 </form>
             </div>
         </div>
 
-        <!-- ==================== MAIN APP DASHBOARD ==================== -->
-        <div id="appScreen" class="hidden flex-1 flex flex-col pb-24">
+        <!-- ==================== MAIN APP ==================== -->
+        <div id="appScreen" class="hidden flex-1 flex flex-col pb-28">
             
             <!-- App Header -->
-            <header class="bg-brand-600 text-white px-6 pt-8 pb-14 rounded-b-[2.5rem] shadow-lg relative">
-                <div class="flex items-center justify-between mb-4">
+            <header class="bg-brand-600 text-white px-6 pt-6 pb-10 rounded-b-[2.5rem] shadow-lg relative">
+                <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center font-bold text-xl border border-white/30 shadow">
+                        <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center font-bold text-lg border border-white/30 shadow">
                             <i class="fa-solid fa-user-gear"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-brand-100">Selamat datang,</p>
-                            <h2 class="text-lg font-bold leading-tight" id="userDisplayName">Tim Humas</h2>
+                            <p class="text-[11px] text-brand-100">Selamat datang,</p>
+                            <h2 class="text-base font-bold leading-tight" id="userDisplayName">Tim Humas</h2>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <!-- PWA Install Button -->
-                        <button id="installAppBtn" class="hidden px-3 py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
+                        <button id="installAppBtn" class="hidden px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
                             <i class="fa-solid fa-download"></i>
                             <span>Install App</span>
                         </button>
-                        
-                        <!-- Logout Button -->
-                        <button id="logoutBtn" title="Keluar" class="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
-                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                        <button id="logoutBtn" title="Keluar" class="w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
+                            <i class="fa-solid fa-right-from-bracket text-xs"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Config Apps Script Indicator -->
-                <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/10 px-3 py-1.5 rounded-xl border border-white/10">
+                <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/10 px-3 py-1 rounded-xl border border-white/10">
                     <span id="syncStatus"><i class="fa-solid fa-database text-amber-300 mr-1"></i> Mode Offline (LocalStorage)</span>
+                    <button onclick="promptAppsScriptUrl()" class="underline hover:text-white">Setting URL GAS</button>
                 </div>
             </header>
 
-            <!-- Main Content Container -->
-            <main class="px-4 -mt-8 space-y-5">
+            <!-- Main Dynamic Container (Pulled up over Header) -->
+            <main class="px-4 -mt-5 space-y-5 flex-1">
 
-                <!-- AI HARIAN BESAR NASIONAL WIDGET CARD -->
-                <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden border border-slate-700">
-                    <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl font-black pointer-events-none">
-                        <i class="fa-solid fa-microchip"></i>
-                    </div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-500/30 border border-brand-400/30 rounded-full text-xs font-semibold text-brand-200">
-                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> AI Humas Reminder
-                        </span>
-                        <span class="text-[11px] text-slate-400" id="aiDateToday">Hari Ini</span>
+                <!-- ==================== TAB 1: DASHBOARD ==================== -->
+                <div id="tab-dashboard" class="tab-content space-y-4">
+                    <!-- AI HOLIDAY WIDGET -->
+                    <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden border border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-500/30 border border-brand-400/30 rounded-full text-xs font-semibold text-brand-200">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> AI Humas Reminder
+                            </span>
+                            <span class="text-[11px] text-slate-400" id="aiDateToday">Hari Ini</span>
+                        </div>
+                        <div id="aiHolidayContent"></div>
                     </div>
 
-                    <div id="aiHolidayContent">
-                        <!-- AI content injected here -->
+                    <!-- DASHBOARD METRICS -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                            <span class="text-xs text-slate-400">Total Konten</span>
+                            <h3 class="text-2xl font-bold text-slate-800" id="metricTotal">0</h3>
+                        </div>
+                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                            <span class="text-xs text-slate-400">Draft</span>
+                            <h3 class="text-2xl font-bold text-amber-600" id="metricDraft">0</h3>
+                        </div>
+                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                            <span class="text-xs text-slate-400">Dalam Proses</span>
+                            <h3 class="text-2xl font-bold text-indigo-600" id="metricProcess">0</h3>
+                        </div>
+                        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                            <span class="text-xs text-slate-400">Publish</span>
+                            <h3 class="text-2xl font-bold text-emerald-600" id="metricPublish">0</h3>
+                        </div>
                     </div>
                 </div>
 
-                <!-- DASHBOARD METRICS CARDS -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div class="flex items-center justify-between text-slate-400 mb-2">
-                            <span class="text-xs font-medium">Total Konten</span>
-                            <div class="w-8 h-8 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center">
-                                <i class="fa-solid fa-layer-group text-sm"></i>
-                            </div>
+                <!-- ==================== TAB 2: DATA KONTEN ==================== -->
+                <div id="tab-konten" class="tab-content hidden space-y-4">
+                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-brand-600"></i> Detail Data Konten
+                            </h3>
+                            <span class="text-xs text-slate-400" id="countFiltered">0 konten</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-slate-800" id="metricTotal">0</h3>
+                        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+                            <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-brand-600 text-white shadow-sm whitespace-nowrap">Semua</button>
+                            <button onclick="setFilter('month')" id="filter-month" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 whitespace-nowrap">Bulan Ini</button>
+                            <button onclick="setFilter('week')" id="filter-week" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 whitespace-nowrap">Minggu Ini</button>
+                            <button onclick="setFilter('upcoming')" id="filter-upcoming" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 whitespace-nowrap">Akan Datang ⏰</button>
+                        </div>
                     </div>
-
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div class="flex items-center justify-between text-slate-400 mb-2">
-                            <span class="text-xs font-medium">Ide & Draft</span>
-                            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                                <i class="fa-solid fa-pen-ruler text-sm"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-amber-600" id="metricDraft">0</h3>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div class="flex items-center justify-between text-slate-400 mb-2">
-                            <span class="text-xs font-medium">Dalam Proses</span>
-                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                                <i class="fa-solid fa-spinner text-sm"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-indigo-600" id="metricProcess">0</h3>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
-                        <div class="flex items-center justify-between text-slate-400 mb-2">
-                            <span class="text-xs font-medium">Publish</span>
-                            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                <i class="fa-solid fa-circle-check text-sm"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-bold text-emerald-600" id="metricPublish">0</h3>
+                    <div id="contentList" class="space-y-3"></div>
+                    <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
+                        <i class="fa-regular fa-folder-open text-3xl text-slate-300 mb-2"></i>
+                        <h4 class="font-bold text-slate-700 text-sm">Belum Ada Data</h4>
                     </div>
                 </div>
 
-                <!-- FILTER TABS & SEARCH -->
-                <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
-                    <div class="flex items-center justify-between">
+                <!-- ==================== TAB 3: PESAN / CHAT ==================== -->
+                <div id="tab-chat" class="tab-content hidden space-y-4">
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-4 space-y-3 flex flex-col h-[65vh]">
+                        <div class="flex items-center justify-between border-b pb-2">
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-brand-600"></i> Diskusi Internal Tim
+                            </h3>
+                            <span class="text-[11px] text-slate-400">Live Chat</span>
+                        </div>
+
+                        <!-- Chat Messages Container -->
+                        <div id="chatMessagesList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                            <!-- Injected dynamically -->
+                        </div>
+
+                        <!-- Chat Input Form -->
+                        <form id="chatForm" onsubmit="handleSendChat(event)" class="space-y-2 border-t pt-3">
+                            <div class="flex gap-2">
+                                <input type="text" id="chatSenderInput" placeholder="Nama Anda" required
+                                    class="w-1/3 p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <input type="text" id="chatTextInput" placeholder="Tulis pesan internal..." required
+                                    class="w-2/3 p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-brand-600 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 hover:bg-brand-700">
+                                <span>Kirim Pesan</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB 4: JADWAL & HARI BESAR ==================== -->
+                <div id="tab-jadwal" class="tab-content hidden space-y-4">
+                    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-list-check text-brand-600"></i> Daftar Konten Tim
+                            <i class="fa-solid fa-calendar-days text-brand-600"></i> Daftar Hari Besar Nasional
                         </h3>
-                        <span class="text-xs text-slate-400" id="countFiltered">0 konten</span>
+                        <div id="fullHolidayList" class="space-y-3 text-xs">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
-
-                    <!-- Horizontal Scrollable Pill Tabs -->
-                    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
-                        <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-brand-600 text-white shadow-sm whitespace-nowrap">Semua</button>
-                        <button onclick="setFilter('month')" id="filter-month" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Bulan Ini</button>
-                        <button onclick="setFilter('week')" id="filter-week" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Minggu Ini</button>
-                        <button onclick="setFilter('upcoming')" id="filter-upcoming" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">Akan Datang ⏰</button>
-                    </div>
-                </div>
-
-                <!-- CONTENT LIST / TABLE -->
-                <div id="contentList" class="space-y-3">
-                    <!-- Dynamic Content Cards Injected Here -->
-                </div>
-
-                <!-- Empty State -->
-                <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
-                    <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="fa-regular fa-folder-open text-2xl"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-700 text-sm">Belum Ada Konten</h4>
-                    <p class="text-xs text-slate-400 mt-1">Tambahkan ide konten baru tim humas sekarang!</p>
                 </div>
 
             </main>
         </div>
 
-        <!-- Floating Add Action Button (Center horizontal di mobile, responsif di desktop) -->
-        <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-6 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
+        <!-- Floating Add Action Button -->
+        <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-20 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
             <i class="fa-solid fa-plus"></i>
         </button>
+
+        <!-- ==================== BOTTOM NATIVE NAVIGATION BAR ==================== -->
+        <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
+            <div class="w-full md:max-w-4xl grid grid-cols-4 py-2">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center gap-1 text-brand-600 font-bold">
+                    <i class="fa-solid fa-house text-lg"></i>
+                    <span class="text-[10px]">Dashboard</span>
+                </button>
+                <button onclick="switchTab('konten')" id="nav-konten" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-folder-closed text-lg"></i>
+                    <span class="text-[10px]">Data Konten</span>
+                </button>
+                <button onclick="switchTab('chat')" id="nav-chat" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-comments text-lg"></i>
+                    <span class="text-[10px]">Pesan</span>
+                </button>
+                <button onclick="switchTab('jadwal')" id="nav-jadwal" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-calendar-days text-lg"></i>
+                    <span class="text-[10px]">Jadwal</span>
+                </button>
+            </div>
+        </nav>
 
         <!-- ==================== MODAL TAMBAH KONTEN ==================== -->
         <div id="modalAdd" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4 transition-opacity">
@@ -291,11 +308,6 @@
                             class="w-full p-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-800 font-normal">
                     </div>
 
-                    <div class="bg-blue-50 p-3 rounded-2xl text-[11px] text-brand-700 flex items-start gap-2">
-                        <i class="fa-solid fa-circle-info mt-0.5"></i>
-                        <span>Konten baru akan otomatis dimulai dari tahapan <b>Draft</b> yang ditangani oleh <b>Tim Pra-Produksi</b>.</span>
-                    </div>
-
                     <div class="pt-2 flex gap-3">
                         <button type="button" onclick="toggleModal(false)" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl transition">Batal</button>
                         <button type="submit" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg transition">Simpan Konten</button>
@@ -336,30 +348,43 @@
 
         let currentFilter = 'all';
         let contents = [];
-        let deferredPrompt = null;
-        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || 'https://script.google.com/macros/s/AKfycbw3UX-xHPjb-lhkICaUATvnY2eb7xBGD5dJVsHBBjO2NgPKh4UyKgRAuZFzO7SshcHj/exec';
+        let messages = [];
+        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || '';
 
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
-            setupPWA();
             renderAIWidget();
+            renderHolidaysTab();
             setTodayDeadlineDefault();
         });
+
+        // Tab Navigation Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600', 'font-bold');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            activeNav.classList.remove('text-slate-400');
+            activeNav.classList.add('text-brand-600', 'font-bold');
+        }
 
         function setTodayDeadlineDefault() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('inputDeadline').value = today;
         }
 
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', (e) => {
+        // Login Logic
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const u = document.getElementById('usernameInput').value;
             const p = document.getElementById('passwordInput').value;
 
             if (u === 'humas' && p === '1234') {
-                const sessionData = { username: u, name: 'Tim Humas Main', loggedInAt: new Date().getTime() };
-                localStorage.setItem('HUMAS_SESSION', JSON.stringify(sessionData));
+                localStorage.setItem('HUMAS_SESSION', JSON.stringify({ username: u, name: 'Tim Humas Main' }));
                 showToast('Login berhasil!', 'success');
                 checkSession();
             } else {
@@ -369,152 +394,88 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('HUMAS_SESSION');
-            showToast('Anda telah logout', 'info');
             checkSession();
         });
 
         function checkSession() {
             const session = JSON.parse(localStorage.getItem('HUMAS_SESSION'));
-            const loginScreen = document.getElementById('loginScreen');
-            const appScreen = document.getElementById('appScreen');
-            const openModalBtn = document.getElementById('openModalBtn');
-
             if (session) {
-                loginScreen.classList.add('hidden');
-                appScreen.classList.remove('hidden');
-                openModalBtn.classList.remove('hidden');
-                document.getElementById('userDisplayName').innerText = session.name;
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appScreen').classList.remove('hidden');
+                document.getElementById('bottomNav').classList.remove('hidden');
+                document.getElementById('bottomNav').classList.add('flex');
+                document.getElementById('openModalBtn').classList.remove('hidden');
                 loadData();
+                loadChats();
             } else {
-                loginScreen.classList.remove('hidden');
-                appScreen.classList.add('hidden');
-                openModalBtn.classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('appScreen').classList.add('hidden');
+                document.getElementById('bottomNav').classList.add('hidden');
+                document.getElementById('openModalBtn').classList.add('hidden');
             }
         }
 
-        function setupPWA() {
-            const manifest = {
-                name: "HumasDesk App",
-                short_name: "HumasDesk",
-                start_url: ".",
-                display: "standalone",
-                background_color: "#2563eb",
-                theme_color: "#2563eb",
-                icons: [{ src: "./logo.png", sizes: "512x512", type: "image/png" }]
+        // Chat Feature
+        function loadChats() {
+            const localMsgs = localStorage.getItem('HUMAS_CHAT_DATA');
+            messages = localMsgs ? JSON.parse(localMsgs) : [
+                { sender: 'Budi (Pra-Prod)', text: 'Konten Hari Pahlawan drafnya sudah siap ya.', time: '10:15' },
+                { sender: 'Siti (Post-Prod)', text: 'Siap, langsung saya bantu edit.', time: '10:18' }
+            ];
+            renderChats();
+        }
+
+        function handleSendChat(e) {
+            e.preventDefault();
+            const sender = document.getElementById('chatSenderInput').value;
+            const text = document.getElementById('chatTextInput').value;
+
+            const newMsg = {
+                sender: sender,
+                text: text,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
             };
-            const stringManifest = JSON.stringify(manifest);
-            const blob = new Blob([stringManifest], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-            const manifestTag = document.createElement('link');
-            manifestTag.rel = 'manifest';
-            manifestTag.href = manifestURL;
-            document.head.appendChild(manifestTag);
 
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                const installBtn = document.getElementById('installAppBtn');
-                installBtn.classList.remove('hidden');
+            messages.push(newMsg);
+            localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
+            document.getElementById('chatTextInput').value = '';
+            renderChats();
+        }
 
-                installBtn.addEventListener('click', async () => {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        if (outcome === 'accepted') {
-                            showToast('Aplikasi berhasil diinstall!', 'success');
-                        }
-                        deferredPrompt = null;
-                        installBtn.classList.add('hidden');
-                    }
-                });
+        function renderChats() {
+            const container = document.getElementById('chatMessagesList');
+            container.innerHTML = '';
+            messages.forEach(m => {
+                container.innerHTML += `
+                    <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 space-y-1">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <strong class="text-brand-700">${m.sender}</strong>
+                            <span class="text-slate-400">${m.time}</span>
+                        </div>
+                        <p class="text-xs text-slate-700">${m.text}</p>
+                    </div>
+                `;
             });
+            container.scrollTop = container.scrollHeight;
         }
 
-        async function loadData() {
-            updateSyncStatus();
-            if (appsScriptUrl) {
-                try {
-                    const res = await fetch(appsScriptUrl);
-                    const data = await res.json();
-                    contents = data;
-                    showToast('Data diperbarui dari Spreadsheet', 'success');
-                } catch (err) {
-                    console.warn('Gagal fetch AppsScript, memuat dari local', err);
-                    loadLocalData();
-                }
-            } else {
-                loadLocalData();
-            }
-            renderDashboard();
-        }
-
-        function loadLocalData() {
+        // Content Data handling
+        function loadData() {
             const local = localStorage.getItem('HUMAS_KONTEN_DATA');
             if (local) {
                 contents = JSON.parse(local);
             } else {
                 contents = [
                     { id: '1', ide: 'Dokumentasi Rapat Kerja Humas', link: 'https://drive.google.com', jenis: 'Foto', sifat: 'Dokumentasi', deadline: getRelativeDate(1), stage: 'Draft', pic: 'Tim Pra-Produksi' },
-                    { id: '2', ide: 'Tips Komunikasi Publik Efektif', link: '', jenis: 'Carousel', sifat: 'Edukasi', deadline: getRelativeDate(3), stage: 'Raw', pic: 'Tim Produksi' },
-                    { id: '3', ide: 'Reels Fun Friday Tim Humas', link: '', jenis: 'Video', sifat: 'Hiburan', deadline: getRelativeDate(-2), stage: 'Publish', pic: 'Tim Post-Produksi' }
+                    { id: '2', ide: 'Reels Fun Friday Tim Humas', link: '', jenis: 'Video', sifat: 'Hiburan', deadline: getRelativeDate(-2), stage: 'Publish', pic: 'Tim Post-Produksi' }
                 ];
                 saveDataLocal();
             }
+            renderDashboard();
         }
 
         function saveDataLocal() {
             localStorage.setItem('HUMAS_KONTEN_DATA', JSON.stringify(contents));
-        }
-
-        async function syncToBackend(item, isNew = false) {
-            saveDataLocal();
-            renderDashboard();
-
-            if (appsScriptUrl) {
-                try {
-                    await fetch(appsScriptUrl, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(item)
-                    });
-                    showToast('Tersinkron dengan Spreadsheet', 'success');
-                } catch (e) {
-                    showToast('Tersimpan di Lokal (GAS error)', 'info');
-                }
-            }
-        }
-
-        function updateSyncStatus() {
-            const statusEl = document.getElementById('syncStatus');
-            if (appsScriptUrl) {
-                statusEl.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
-            } else {
-                statusEl.innerHTML = `<i class="fa-solid fa-database text-amber-300 mr-1"></i> Mode Offline (LocalStorage)`;
-            }
-        }
-
-        function promptAppsScriptUrl() {
-            const current = appsScriptUrl || '';
-            const newUrl = prompt('Masukkan Web App URL Google Apps Script Anda:', current);
-            if (newUrl !== null) {
-                appsScriptUrl = newUrl.trim();
-                localStorage.setItem('HUMAS_GAS_URL', appsScriptUrl);
-                loadData();
-            }
-        }
-
-        function advanceStage(id) {
-            const item = contents.find(c => c.id === id);
-            if (!item) return;
-
-            const currentIndex = STAGES.indexOf(item.stage);
-            if (currentIndex < STAGES.length - 1) {
-                item.stage = STAGES[currentIndex + 1];
-                item.pic = PIC_MAP[item.stage];
-                showToast(`Konten naik ke tahap: ${item.stage}`, 'success');
-                syncToBackend(item);
-            }
         }
 
         function handleFormSubmit(e) {
@@ -531,34 +492,24 @@
             };
 
             contents.unshift(newItem);
-            syncToBackend(newItem, true);
+            saveDataLocal();
+            renderDashboard();
             toggleModal(false);
             e.target.reset();
-            setTodayDeadlineDefault();
-            showToast('Konten berhasil ditambahkan!', 'success');
+            showToast('Konten ditambahkan!', 'success');
         }
 
-        function deleteItem(id) {
-            if (confirm('Yakin ingin menghapus konten ini?')) {
-                contents = contents.filter(c => c.id !== id);
+        function advanceStage(id) {
+            const item = contents.find(c => c.id === id);
+            if (!item) return;
+            const idx = STAGES.indexOf(item.stage);
+            if (idx < STAGES.length - 1) {
+                item.stage = STAGES[idx + 1];
+                item.pic = PIC_MAP[item.stage];
                 saveDataLocal();
                 renderDashboard();
-                showToast('Konten telah dihapus', 'info');
+                showToast(`Status: ${item.stage}`, 'success');
             }
-        }
-
-        function setFilter(filterType) {
-            currentFilter = filterType;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
-                btn.classList.add('bg-slate-100', 'text-slate-600');
-            });
-            const activeBtn = document.getElementById(`filter-${filterType}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
-                activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
-            }
-            renderDashboard();
         }
 
         function renderDashboard() {
@@ -572,183 +523,78 @@
             document.getElementById('metricProcess').innerText = process;
             document.getElementById('metricPublish').innerText = publish;
 
-            const filtered = contents.filter(item => {
-                if (currentFilter === 'all') return true;
-                
-                const itemDate = new Date(item.deadline);
-                const today = new Date();
-                today.setHours(0,0,0,0);
+            renderContentList();
+        }
 
-                if (currentFilter === 'month') {
-                    return itemDate.getMonth() === today.getMonth() && itemDate.getFullYear() === today.getFullYear();
-                }
-                if (currentFilter === 'week') {
-                    const nextWeek = new Date(today);
-                    nextWeek.setDate(today.getDate() + 7);
-                    return itemDate >= today && itemDate <= nextWeek;
-                }
-                if (currentFilter === 'upcoming') {
-                    return itemDate >= today && item.stage !== 'Publish';
-                }
-                return true;
-            });
-
-            document.getElementById('countFiltered').innerText = `${filtered.length} konten`;
-
+        function renderContentList() {
             const listEl = document.getElementById('contentList');
-            const emptyEl = document.getElementById('emptyState');
             listEl.innerHTML = '';
-
-            if (filtered.length === 0) {
-                emptyEl.classList.remove('hidden');
-                return;
-            }
-            emptyEl.classList.add('hidden');
-
-            filtered.forEach(item => {
-                const stageIndex = STAGES.indexOf(item.stage);
+            contents.forEach(item => {
                 const isDone = item.stage === 'Publish';
-                
-                let stageBadgeClass = 'bg-slate-100 text-slate-700';
-                if (item.stage === 'Draft') stageBadgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
-                if (item.stage === 'Raw') stageBadgeClass = 'bg-blue-100 text-blue-800 border-blue-200';
-                if (item.stage === 'Edit') stageBadgeClass = 'bg-purple-100 text-purple-800 border-purple-200';
-                if (item.stage === 'Approval Pimpinan') stageBadgeClass = 'bg-orange-100 text-orange-800 border-orange-200';
-                if (item.stage === 'Publish') stageBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
-
-                let iconJenis = 'fa-image';
-                if (item.jenis === 'Video') iconJenis = 'fa-video';
-                if (item.jenis === 'Carousel') iconJenis = 'fa-layer-group';
-
-                const cardHtml = `
-                    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4 hover:shadow-md transition">
-                        <div class="flex items-start justify-between gap-2">
-                            <div class="space-y-1">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-xl border ${stageBadgeClass}">
-                                        ${item.stage}
-                                    </span>
-                                    <span class="text-[11px] text-slate-500 font-medium bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-100">
-                                        <i class="fa-solid ${iconJenis} text-brand-600 mr-1"></i> ${item.jenis}
-                                    </span>
-                                    <span class="text-[11px] text-slate-500 font-medium bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-100">
-                                        ${item.sifat}
-                                    </span>
-                                </div>
-                                <h4 class="font-bold text-slate-800 text-base leading-snug pt-1">${item.ide}</h4>
+                listEl.innerHTML += `
+                    <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-brand-50 text-brand-700 border border-brand-100">${item.stage}</span>
+                                <h4 class="font-bold text-slate-800 text-sm mt-1">${item.ide}</h4>
                             </div>
-                            <button onclick="deleteItem('${item.id}')" class="text-slate-300 hover:text-rose-500 p-1 transition">
-                                <i class="fa-regular fa-trash-can text-sm"></i>
-                            </button>
+                            <span class="text-[11px] text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${formatDate(item.deadline)}</span>
                         </div>
-
-                        <div class="space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                            <div class="flex justify-between items-center text-[11px] font-semibold">
-                                <span class="text-slate-500">PJ: <strong class="text-brand-700">${item.pic}</strong></span>
-                                <span class="text-slate-400">Tahap ${stageIndex + 1} dari 5</span>
-                            </div>
-                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
-                                <div class="bg-brand-600 h-full transition-all duration-300" style="width: ${((stageIndex + 1) / 5) * 100}%"></div>
-                            </div>
+                        <div class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-xl">
+                            PJ: <strong class="text-brand-700">${item.pic}</strong> | Jenis: ${item.jenis} (${item.sifat})
                         </div>
-
-                        <div class="flex items-center justify-between pt-1 text-xs">
-                            <div class="flex items-center gap-3 text-slate-500 text-[11px]">
-                                <span><i class="fa-regular fa-calendar text-brand-600 mr-1"></i>${formatDate(item.deadline)}</span>
-                                ${item.link ? `<a href="${item.link}" target="_blank" class="text-brand-600 underline font-semibold flex items-center gap-1"><i class="fa-solid fa-link text-[10px]"></i> Ref</a>` : ''}
-                            </div>
-
-                            ${!isDone ? `
-                                <button onclick="advanceStage('${item.id}')" 
-                                    class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-xl font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
-                                    <i class="fa-solid fa-circle-check text-brand-600"></i>
-                                    <span>Lanjut Tahap</span>
-                                </button>
-                            ` : `
-                                <span class="text-emerald-600 font-bold flex items-center gap-1 text-[11px] bg-emerald-50 px-2.5 py-1 rounded-xl">
-                                    <i class="fa-solid fa-check-double"></i> Terpublikasi
-                                </span>
-                            `}
+                        <div class="flex justify-between items-center pt-1 text-xs">
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="text-brand-600 underline text-[11px] font-semibold"><i class="fa-solid fa-link mr-1"></i>Link Referensi</a>` : '<span></span>'}
+                            ${!isDone ? `<button onclick="advanceStage('${item.id}')" class="px-3 py-1 bg-brand-600 text-white rounded-xl font-bold text-[11px]">Lanjut Tahap</button>` : '<span class="text-emerald-600 font-bold text-[11px]"><i class="fa-solid fa-check-double mr-1"></i>Terpublikasi</span>'}
                         </div>
                     </div>
                 `;
-                listEl.innerHTML += cardHtml;
             });
         }
 
         function renderAIWidget() {
-            const today = new Date();
-            document.getElementById('aiDateToday').innerText = formatDate(today.toISOString().split('T')[0]);
-
-            const upcoming = NATIONAL_HOLIDAYS.map(h => {
-                const hDate = new Date(h.date);
-                return { ...h, diff: hDate - today };
-            }).filter(h => h.diff >= -86400000).sort((a,b) => a.diff - b.diff)[0] || NATIONAL_HOLIDAYS[0];
-
-            const daysLeft = Math.ceil(upcoming.diff / (1000 * 60 * 60 * 24));
-            let daysLabel = daysLeft === 0 ? 'Hari Ini!' : `${daysLeft} Hari Lagi`;
-
-            const widgetEl = document.getElementById('aiHolidayContent');
-            widgetEl.innerHTML = `
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between">
-                        <h4 class="font-bold text-lg text-amber-300 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-day"></i> ${upcoming.name}
-                        </h4>
-                        <span class="px-2.5 py-0.5 bg-amber-400/20 text-amber-300 font-bold text-[11px] rounded-lg border border-amber-400/30">
-                            ${daysLabel} (${formatDate(upcoming.date)})
-                        </span>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong class="text-white">Rekomendasi Tema AI:</strong> "${upcoming.idea}"
-                    </p>
-                    <div class="pt-1">
-                        <button onclick="applyAiIdea('${upcoming.name}', '${upcoming.idea}')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold text-white transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-plus text-amber-300"></i> Buat Konten Dari Ide Ini
-                        </button>
-                    </div>
+            const upcoming = NATIONAL_HOLIDAYS[0];
+            document.getElementById('aiHolidayContent').innerHTML = `
+                <div class="space-y-1">
+                    <h4 class="font-bold text-amber-300 text-sm">${upcoming.name} (${formatDate(upcoming.date)})</h4>
+                    <p class="text-xs text-slate-300">Rekomendasi AI: "${upcoming.idea}"</p>
                 </div>
             `;
         }
 
-        function applyAiIdea(name, idea) {
-            toggleModal(true);
-            document.getElementById('inputIde').value = `[Hari Besar] ${name} - ${idea}`;
-            document.getElementById('inputSifat').value = 'Edukasi';
+        function renderHolidaysTab() {
+            const listEl = document.getElementById('fullHolidayList');
+            listEl.innerHTML = '';
+            NATIONAL_HOLIDAYS.forEach(h => {
+                listEl.innerHTML += `
+                    <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <div>
+                            <h5 class="font-bold text-slate-800">${h.name}</h5>
+                            <p class="text-slate-500 text-[11px]">${h.idea}</p>
+                        </div>
+                        <span class="text-brand-600 font-semibold text-[11px] whitespace-nowrap ml-2">${formatDate(h.date)}</span>
+                    </div>
+                `;
+            });
         }
 
         function toggleModal(show) {
-            const modal = document.getElementById('modalAdd');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
+            document.getElementById('modalAdd').classList.toggle('hidden', !show);
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr) return '-';
-            const options = { day: 'numeric', month: 'short', year: 'numeric' };
-            return new Date(dateStr).toLocaleDateString('id-ID', options);
+        function formatDate(d) {
+            return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
         }
 
-        function getRelativeDate(daysOffset) {
-            const d = new Date();
-            d.setDate(d.getDate() + daysOffset);
-            return d.toISOString().split('T')[0];
+        function getRelativeDate(o) {
+            const d = new Date(); d.setDate(d.getDate() + o); return d.toISOString().split('T')[0];
         }
 
-        function showToast(msg, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMsg.innerText = msg;
-            if (type === 'success') toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 text-base';
-            else if (type === 'error') toastIcon.className = 'fa-solid fa-circle-xmark text-rose-400 text-base';
-            else toastIcon.className = 'fa-solid fa-circle-info text-sky-400 text-base';
-
-            toast.classList.remove('translate-y-[-150%]');
-            setTimeout(() => {
-                toast.classList.add('translate-y-[-150%]');
-            }, 3000);
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            t.classList.remove('translate-y-[-150%]');
+            setTimeout(() => t.classList.add('translate-y-[-150%]'), 2500);
         }
     </script>
 </body>
