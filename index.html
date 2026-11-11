@@ -6,10 +6,8 @@
     <title>HumasDesk - App Pencatatan Konten</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Boxicons -->
+    <!-- Boxicons v2.1.4 -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -42,6 +40,7 @@
         body {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -49,12 +48,28 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animasi Geser (Slide Transition) Antar Tab */
+        @keyframes slideFromRight {
+            0% { opacity: 0; transform: translateX(28px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromLeft {
+            0% { opacity: 0; transform: translateX(-28px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slide-right {
+            animation: slideFromRight 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .animate-slide-left {
+            animation: slideFromLeft 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
     <!-- Container Utama -->
-    <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200">
+    <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200 overflow-x-hidden">
         
         <!-- ==================== LOGIN SCREEN ==================== -->
         <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
@@ -287,25 +302,34 @@
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- ==================== BOTTOM NAVIGATION BAR (MINIMALIS TANPA TEKS) ==================== -->
-        <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
-            <div class="w-full md:max-w-4xl grid grid-cols-4 py-3">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center justify-center relative group">
-                    <i class="bx bx-home-alt-2 text-2xl text-slate-900"></i>
-                    <span id="dot-dashboard" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1"></span>
+        <!-- ==================== BOTTOM NAVIGATION BAR (MINIMALIS TANPA TEKS + ACTIVE FILL BIRU) ==================== -->
+        <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
+            <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
+                
+                <!-- Tab 1: Dashboard -->
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-alt-2" data-solid="bxs-home-alt-2" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bxs-home-alt-2 text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
+                    <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
-                <button onclick="switchTab('konten')" id="nav-konten" class="nav-btn flex flex-col items-center justify-center relative group">
-                    <i class="bx bx-folder text-2xl text-slate-400 hover:text-slate-700"></i>
-                    <span id="dot-konten" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
+                
+                <!-- Tab 2: Data Konten -->
+                <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-folder" data-solid="bxs-folder" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-folder text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                    <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                <button onclick="switchTab('chat')" id="nav-chat" class="nav-btn flex flex-col items-center justify-center relative group">
-                    <i class="bx bx-chat text-2xl text-slate-400 hover:text-slate-700"></i>
-                    <span id="dot-chat" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
+                
+                <!-- Tab 3: Pesan -->
+                <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-chat" data-solid="bxs-chat" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-chat text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                    <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                <button onclick="switchTab('jadwal')" id="nav-jadwal" class="nav-btn flex flex-col items-center justify-center relative group">
-                    <i class="bx bx-calendar text-2xl text-slate-400 hover:text-slate-700"></i>
-                    <span id="dot-jadwal" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
+                
+                <!-- Tab 4: Jadwal -->
+                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-calendar" data-solid="bxs-calendar" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-calendar text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                    <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
+
             </div>
         </nav>
 
@@ -398,6 +422,8 @@
             { date: '2026-12-22', name: 'Hari Ibu', idea: 'Dokumentasi apresiasi srikandi tim humas.' }
         ];
 
+        const TAB_ORDER = ['dashboard', 'konten', 'chat', 'jadwal'];
+        let currentTab = 'dashboard';
         let currentFilter = 'all';
         let contents = [];
         let messages = [];
@@ -413,27 +439,51 @@
             setTodayDeadlineDefault();
         });
 
+        // Switch Tab dengan Ikon Fill Biru & Animasi Geser (Slide)
         function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            
-            const navs = ['dashboard', 'konten', 'chat', 'jadwal'];
-            navs.forEach(n => {
+            if (tabName === currentTab) return;
+
+            const oldIndex = TAB_ORDER.indexOf(currentTab);
+            const newIndex = TAB_ORDER.indexOf(tabName);
+            const slideAnimClass = newIndex > oldIndex ? 'animate-slide-right' : 'animate-slide-left';
+
+            // Sembunyikan semua tab dan bersihkan kelas animasi
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('animate-slide-right', 'animate-slide-left');
+            });
+
+            // Reset semua tombol navigasi bawah ke mode regular abu-abu
+            TAB_ORDER.forEach(n => {
                 const btn = document.getElementById(`nav-${n}`);
                 const icon = btn.querySelector('i');
                 const dot = document.getElementById(`dot-${n}`);
-                icon.classList.remove('text-slate-900');
-                icon.classList.add('text-slate-400');
+                const regIcon = btn.getAttribute('data-regular');
+                const solIcon = btn.getAttribute('data-solid');
+
+                icon.classList.remove(solIcon, 'text-brand-600', 'scale-110');
+                icon.classList.add(regIcon, 'text-slate-400');
                 if (dot) dot.classList.add('hidden');
             });
 
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            // Tampilkan tab target dengan animasi geser
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            targetTab.classList.remove('hidden');
+            void targetTab.offsetWidth; // Trigger reflow agar animasi selalu berjalan
+            targetTab.classList.add(slideAnimClass);
+
+            // Set tombol navigasi aktif menjadi Solid Fill Biru
             const activeNav = document.getElementById(`nav-${tabName}`);
             const activeIcon = activeNav.querySelector('i');
             const activeDot = document.getElementById(`dot-${tabName}`);
+            const regIcon = activeNav.getAttribute('data-regular');
+            const solIcon = activeNav.getAttribute('data-solid');
 
-            activeIcon.classList.remove('text-slate-400');
-            activeIcon.classList.add('text-slate-900');
+            activeIcon.classList.remove(regIcon, 'text-slate-400');
+            activeIcon.classList.add(solIcon, 'text-brand-600', 'scale-110');
             if (activeDot) activeDot.classList.remove('hidden');
+
+            currentTab = tabName;
         }
 
         function setTodayDeadlineDefault() {
@@ -788,7 +838,13 @@
         }
 
         function renderAIWidget() {
-            const upcoming = NATIONAL_HOLIDAYS[0];
+            const today = new Date();
+            document.getElementById('aiDateToday').innerText = formatDate(today.toISOString().split('T')[0]);
+            const upcoming = NATIONAL_HOLIDAYS.map(h => {
+                const hDate = new Date(h.date);
+                return { ...h, diff: hDate - today };
+            }).filter(h => h.diff >= -86400000).sort((a,b) => a.diff - b.diff)[0] || NATIONAL_HOLIDAYS[0];
+
             document.getElementById('aiHolidayContent').innerHTML = `
                 <div class="space-y-1">
                     <h4 class="font-bold text-amber-300 text-sm">${upcoming.name} (${formatDate(upcoming.date)})</h4>
