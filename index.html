@@ -6,9 +6,9 @@
     <title>HumasDesk - App Pencatatan Konten</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Boxicons (Ikon Minimalis Modern seperti di Gambar Referensi) -->
+    <!-- Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- Font Awesome (Untuk ikon pendukung) -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
-    <!-- Container Utama: Full Width di HP, Max-width di Desktop -->
+    <!-- Container Utama -->
     <div class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200">
         
         <!-- ==================== LOGIN SCREEN ==================== -->
@@ -128,7 +128,7 @@
             <!-- Main Dynamic Content Container -->
             <main class="px-4 -mt-6 space-y-5 flex-1">
 
-                <!-- ==================== TAB 1: DASHBOARD (KAYA INFORMASI & METRIK LENGKAP) ==================== -->
+                <!-- ==================== TAB 1: DASHBOARD ==================== -->
                 <div id="tab-dashboard" class="tab-content space-y-4">
                     
                     <!-- AI HOLIDAY REMINDER WIDGET -->
@@ -145,7 +145,7 @@
                         <div id="aiHolidayContent"></div>
                     </div>
 
-                    <!-- DASHBOARD METRICS CARDS (4 METRIK RINGKASAN) -->
+                    <!-- METRICS CARDS -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
                             <div class="flex items-center justify-between text-slate-400 mb-2">
@@ -188,7 +188,7 @@
                         </div>
                     </div>
 
-                    <!-- FILTER TABS HORIZONTAL & LIST DAFTAR KONTEN -->
+                    <!-- FILTER TABS & CONTENT LIST -->
                     <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
                         <div class="flex items-center justify-between">
                             <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -205,10 +205,8 @@
                         </div>
                     </div>
 
-                    <!-- CARDS CONTAINER (INJECTED VIA JS) -->
                     <div id="contentList" class="space-y-3"></div>
 
-                    <!-- EMPTY STATE -->
                     <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
                         <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
                             <i class="bx bx-folder-open text-3xl"></i>
@@ -219,7 +217,7 @@
 
                 </div>
 
-                <!-- ==================== TAB 2: DATA KONTEN (TABEL MATRIX DETIL) ==================== -->
+                <!-- ==================== TAB 2: DATA KONTEN (MATRIX TABLE) ==================== -->
                 <div id="tab-konten" class="tab-content hidden space-y-4">
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -238,15 +236,13 @@
                                         <th class="p-3">Referensi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="matrixTableBody">
-                                    <!-- Injected via JS -->
-                                </tbody>
+                                <tbody id="matrixTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- ==================== TAB 3: PESAN / CHAT INTERNAL ==================== -->
+                <!-- ==================== TAB 3: PESAN CHAT ==================== -->
                 <div id="tab-chat" class="tab-content hidden space-y-4">
                     <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-4 space-y-3 flex flex-col h-[65vh]">
                         <div class="flex items-center justify-between border-b pb-2">
@@ -286,39 +282,30 @@
             </main>
         </div>
 
-        <!-- Floating Add Action Button -->
+        <!-- Floating Add Button -->
         <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-20 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- ==================== BOTTOM NAVIGATION BAR (MINIMALIS ALAMIAH TANPA TEKS SEPERTI GAMBAR REFERENSI) ==================== -->
+        <!-- ==================== BOTTOM NAVIGATION BAR (MINIMALIS TANPA TEKS) ==================== -->
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3">
-                
-                <!-- Tab 1: Dashboard -->
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center justify-center relative group">
                     <i class="bx bx-home-alt-2 text-2xl text-slate-900"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1"></span>
                 </button>
-                
-                <!-- Tab 2: Data Konten -->
                 <button onclick="switchTab('konten')" id="nav-konten" class="nav-btn flex flex-col items-center justify-center relative group">
                     <i class="bx bx-folder text-2xl text-slate-400 hover:text-slate-700"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
                 </button>
-                
-                <!-- Tab 3: Pesan -->
                 <button onclick="switchTab('chat')" id="nav-chat" class="nav-btn flex flex-col items-center justify-center relative group">
                     <i class="bx bx-chat text-2xl text-slate-400 hover:text-slate-700"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
                 </button>
-                
-                <!-- Tab 4: Jadwal -->
                 <button onclick="switchTab('jadwal')" id="nav-jadwal" class="nav-btn flex flex-col items-center justify-center relative group">
                     <i class="bx bx-calendar text-2xl text-slate-400 hover:text-slate-700"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-rose-500 rounded-full absolute -bottom-1 hidden"></span>
                 </button>
-
             </div>
         </nav>
 
@@ -414,7 +401,10 @@
         let currentFilter = 'all';
         let contents = [];
         let messages = [];
-        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || 'https://script.google.com/macros/s/AKfycbzJu8J_olgU-v1_AM4-Se1rhe7JRvx_JgSR6iKlOR6kvXhEaR4fFxvAgcQUFvEDSWVF/exec';
+
+        // 📌 PASTEKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI ANTARA TANDA PETIK DI BAWAH INI
+        let defaultGasUrl = ''; 
+        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
@@ -423,23 +413,19 @@
             setTodayDeadlineDefault();
         });
 
-        // Tab Navigation Switcher (Perubahan Ikon Minimalis & Indicator Dot)
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             
-            // Reset kustom ikon
             const navs = ['dashboard', 'konten', 'chat', 'jadwal'];
             navs.forEach(n => {
                 const btn = document.getElementById(`nav-${n}`);
                 const icon = btn.querySelector('i');
                 const dot = document.getElementById(`dot-${n}`);
-                
                 icon.classList.remove('text-slate-900');
                 icon.classList.add('text-slate-400');
                 if (dot) dot.classList.add('hidden');
             });
 
-            // Set aktif tab
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
             const activeNav = document.getElementById(`nav-${tabName}`);
             const activeIcon = activeNav.querySelector('i');
@@ -455,7 +441,6 @@
             document.getElementById('inputDeadline').value = today;
         }
 
-        // Login Handling
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const u = document.getElementById('usernameInput').value;
@@ -494,21 +479,36 @@
         }
 
         // Chat Feature
-        function loadChats() {
+        async function loadChats() {
+            if (appsScriptUrl) {
+                try {
+                    const res = await fetch(`${appsScriptUrl}?action=getChats`);
+                    const data = await res.json();
+                    messages = data;
+                } catch (e) {
+                    loadLocalChats();
+                }
+            } else {
+                loadLocalChats();
+            }
+            renderChats();
+        }
+
+        function loadLocalChats() {
             const localMsgs = localStorage.getItem('HUMAS_CHAT_DATA');
             messages = localMsgs ? JSON.parse(localMsgs) : [
                 { sender: 'Budi (Pra-Prod)', text: 'Konten Hari Pahlawan drafnya sudah siap ya.', time: '10:15' },
                 { sender: 'Siti (Post-Prod)', text: 'Siap, langsung saya bantu edit.', time: '10:18' }
             ];
-            renderChats();
         }
 
-        function handleSendChat(e) {
+        async function handleSendChat(e) {
             e.preventDefault();
             const sender = document.getElementById('chatSenderInput').value;
             const text = document.getElementById('chatTextInput').value;
 
             const newMsg = {
+                type: 'chat',
                 sender: sender,
                 text: text,
                 time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
@@ -518,6 +518,17 @@
             localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
             document.getElementById('chatTextInput').value = '';
             renderChats();
+
+            if (appsScriptUrl) {
+                try {
+                    await fetch(appsScriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newMsg)
+                    });
+                } catch (err) {}
+            }
         }
 
         function renderChats() {
@@ -537,8 +548,26 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Data Management
-        function loadData() {
+        // Master Data Content Management
+        async function loadData() {
+            updateSyncStatus();
+            if (appsScriptUrl) {
+                try {
+                    const res = await fetch(appsScriptUrl);
+                    const data = await res.json();
+                    contents = data;
+                    showToast('Data diperbarui dari Spreadsheet', 'success');
+                } catch (err) {
+                    loadLocalData();
+                }
+            } else {
+                loadLocalData();
+            }
+            renderDashboard();
+            renderMatrixTable();
+        }
+
+        function loadLocalData() {
             const local = localStorage.getItem('HUMAS_KONTEN_DATA');
             if (local) {
                 contents = JSON.parse(local);
@@ -550,12 +579,30 @@
                 ];
                 saveDataLocal();
             }
-            renderDashboard();
-            renderMatrixTable();
         }
 
         function saveDataLocal() {
             localStorage.setItem('HUMAS_KONTEN_DATA', JSON.stringify(contents));
+        }
+
+        async function syncToBackend(item) {
+            saveDataLocal();
+            renderDashboard();
+            renderMatrixTable();
+
+            if (appsScriptUrl) {
+                try {
+                    await fetch(appsScriptUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(item)
+                    });
+                    showToast('Tersinkron ke Spreadsheet', 'success');
+                } catch (e) {
+                    showToast('Tersimpan Lokal (Gagal sync)', 'info');
+                }
+            }
         }
 
         function handleFormSubmit(e) {
@@ -572,11 +619,10 @@
             };
 
             contents.unshift(newItem);
-            saveDataLocal();
-            renderDashboard();
-            renderMatrixTable();
+            syncToBackend(newItem);
             toggleModal(false);
             e.target.reset();
+            setTodayDeadlineDefault();
             showToast('Konten ditambahkan!', 'success');
         }
 
@@ -587,9 +633,7 @@
             if (idx < STAGES.length - 1) {
                 item.stage = STAGES[idx + 1];
                 item.pic = PIC_MAP[item.stage];
-                saveDataLocal();
-                renderDashboard();
-                renderMatrixTable();
+                syncToBackend(item);
                 showToast(`Status: ${item.stage}`, 'success');
             }
         }
@@ -618,7 +662,6 @@
             renderDashboard();
         }
 
-        // Render Dashboard Dashboard Utama (Kaya Informasi)
         function renderDashboard() {
             const total = contents.length;
             const draft = contents.filter(c => c.stage === 'Draft').length;
@@ -726,7 +769,6 @@
             });
         }
 
-        // Render Matrix Table Tab
         function renderMatrixTable() {
             const tbody = document.getElementById('matrixTableBody');
             tbody.innerHTML = '';
@@ -771,6 +813,15 @@
             });
         }
 
+        function updateSyncStatus() {
+            const statusEl = document.getElementById('syncStatus');
+            if (appsScriptUrl) {
+                statusEl.innerHTML = `<i class="bx bx-cloud-download text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
+            } else {
+                statusEl.innerHTML = `<i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (LocalStorage)`;
+            }
+        }
+
         function promptAppsScriptUrl() {
             const current = appsScriptUrl || '';
             const newUrl = prompt('Masukkan Web App URL Google Apps Script Anda:', current);
@@ -778,6 +829,7 @@
                 appsScriptUrl = newUrl.trim();
                 localStorage.setItem('HUMAS_GAS_URL', appsScriptUrl);
                 loadData();
+                loadChats();
             }
         }
 
