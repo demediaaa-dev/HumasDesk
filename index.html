@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" href="./logo.png">
     <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#2563eb">
 
     <script>
         tailwind.config = {
@@ -102,6 +103,12 @@
                     </div>
 
                     <div class="flex items-center gap-2">
+                        <!-- TOMBOL INSTAL PWA -->
+                        <button id="installPwaBtn" onclick="installPWA()" title="Install Aplikasi" class="hidden px-3 h-9 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-2xl flex items-center gap-1.5 shadow-md transition active:scale-95">
+                            <i class="bx bx-download text-base"></i>
+                            <span>Install App</span>
+                        </button>
+
                         <button onclick="manualRefresh()" title="Sinkronkan Data" class="w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
                             <i id="refreshIcon" class="bx bx-refresh text-xl"></i>
                         </button>
@@ -112,8 +119,8 @@
                 </div>
 
                 <div class="mt-2 text-[11px] text-brand-100 flex items-center justify-between bg-black/15 px-3 py-1.5 rounded-xl border border-white/10">
-                    <span id="syncStatus"><i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (LocalStorage)</span>
-                    <button onclick="promptAppsScriptUrl()" class="underline font-semibold hover:text-white">Setting URL GAS</button>
+                    <span id="syncStatus"><i class="bx bx-cloud-check text-emerald-300 mr-1"></i> Terhubung Database</span>
+                    <span class="text-[10px] opacity-80">HumasDesk v2.0</span>
                 </div>
             </header>
 
@@ -216,9 +223,9 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: PESAN CHAT -->
-                <div id="tab-chat" class="tab-content hidden space-y-4">
-                    <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden flex flex-col h-[68vh]">
+                <!-- TAB 3: PESAN CHAT (AREA BUBBLE SCROLLABLE, INPUT STATIS DI BAWAH) -->
+                <div id="tab-chat" class="tab-content hidden space-y-3 pb-28">
+                    <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden flex flex-col">
                         <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">
@@ -236,22 +243,7 @@
                             </button>
                         </div>
 
-                        <div id="chatMessagesList" class="flex-1 overflow-y-auto p-4 space-y-3 bg-[#f0f4f8]"></div>
-
-                        <form id="chatForm" onsubmit="handleSendChat(event)" class="p-3 bg-white border-t border-slate-100 space-y-2">
-                            <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-                                <i class="bx bxs-user-badge text-brand-600 text-base"></i>
-                                <input type="text" id="chatSenderInput" placeholder="Ketik Nama Pengirim (cth: Budi)" required
-                                    class="w-full bg-transparent text-xs font-medium text-slate-700 focus:outline-none">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="text" id="chatTextInput" placeholder="Ketik pesan..." required autocomplete="off"
-                                    class="flex-1 px-4 py-2.5 bg-slate-100 rounded-full text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
-                                <button type="submit" class="w-10 h-10 bg-brand-600 hover:bg-brand-700 text-white rounded-full flex items-center justify-center shadow-md active:scale-90 transition shrink-0">
-                                    <i class="bx bxs-send text-base ml-0.5"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <div id="chatMessagesList" class="min-h-[52vh] max-h-[58vh] overflow-y-auto p-4 space-y-3 bg-[#f0f4f8]"></div>
                     </div>
                 </div>
 
@@ -268,7 +260,25 @@
             </main>
         </div>
 
-        <!-- Floating Add Button -->
+        <!-- STATIS CHAT INPUT BAR (MUNCUL HANYA DI TAB CHAT, TEPAT DI ATAS NAVBAR) -->
+        <div id="staticChatBar" class="hidden fixed bottom-[56px] left-0 right-0 z-30 flex justify-center pointer-events-none">
+            <form id="chatForm" onsubmit="handleSendChat(event)" class="w-full md:max-w-4xl bg-white/95 backdrop-blur-md border-t border-x border-slate-200 px-4 py-2.5 shadow-lg space-y-1.5 pointer-events-auto">
+                <div class="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200">
+                    <i class="bx bxs-user-badge text-brand-600 text-sm"></i>
+                    <input type="text" id="chatSenderInput" placeholder="Nama Pengirim (cth: Budi)" required
+                        class="w-full bg-transparent text-[11px] font-semibold text-slate-700 focus:outline-none">
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="chatTextInput" placeholder="Ketik pesan diskusi..." required autocomplete="off"
+                        class="flex-1 px-4 py-2 bg-slate-100 rounded-full text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                    <button type="submit" class="w-9 h-9 bg-brand-600 hover:bg-brand-700 text-white rounded-full flex items-center justify-center shadow-md active:scale-90 transition shrink-0">
+                        <i class="bx bxs-send text-sm ml-0.5"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- FLOATING ADD BUTTON (HANYA MUNCUL DI DASHBOARD & DATA KONTEN) -->
         <button id="openModalBtn" onclick="toggleModal(true)" class="hidden fixed bottom-20 right-6 md:right-[calc(50vw-27rem)] w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-40 active:scale-95 transition-all">
             <i class="bx bx-plus"></i>
         </button>
@@ -362,6 +372,10 @@
     </div>
 
     <script>
+        // ==================== HARDCODE URL GOOGLE APPS SCRIPT (TANPA CACHE) ====================
+        // Ganti URL di bawah ini dengan Web App URL (/exec) Google Apps Script Anda
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZz9SgUHmxej6p8PcZm2InWCbE0ITzNKY3g4cnW-GMHIYZs_Z9FjtHS9I6keKmTRvr/exec';
+
         const STAGES = ['Draft', 'Raw', 'Edit', 'Approval Pimpinan', 'Publish'];
         const PIC_MAP = {
             'Draft': 'Tim Pra-Produksi',
@@ -388,11 +402,47 @@
         let contents = [];
         let messages = [];
         let isUpdatingStage = false;
+        let deferredPrompt = null;
 
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbwZz9SgUHmxej6p8PcZm2InWCbE0ITzNKY3g4cnW-GMHIYZs_Z9FjtHS9I6keKmTRvr/exec'; 
-        let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
+        // ==================== PWA INSTALL PROMPT & SERVICE WORKER ====================
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installPwaBtn');
+            if (installBtn) installBtn.classList.remove('hidden');
+        });
 
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            const installBtn = document.getElementById('installPwaBtn');
+            if (installBtn) installBtn.classList.add('hidden');
+            showToast('Aplikasi berhasil diinstal!');
+        });
+
+        async function installPWA() {
+            if (!deferredPrompt) {
+                showToast('Gunakan menu browser: Tambah ke Layar Utama');
+                return;
+            }
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                document.getElementById('installPwaBtn').classList.add('hidden');
+            }
+            deferredPrompt = null;
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+
+        // ==================== INIT ====================
         window.addEventListener('DOMContentLoaded', () => {
+            // Bersihkan sisa cache URL lama jika pernah tersimpan
+            localStorage.removeItem('HUMAS_GAS_URL');
+
             checkSession();
             renderAIWidget();
             renderHolidaysTab();
@@ -425,6 +475,25 @@
                 }
                 touchStartX = 0; touchStartY = 0;
             }, { passive: true });
+        }
+
+        function updateFloatingElements(tabName) {
+            const addBtn = document.getElementById('openModalBtn');
+            const chatBar = document.getElementById('staticChatBar');
+
+            // Tombol Tambah (+) HANYA tampil di dashboard & konten
+            if (tabName === 'dashboard' || tabName === 'konten') {
+                addBtn.classList.remove('hidden');
+            } else {
+                addBtn.classList.add('hidden');
+            }
+
+            // Input Chat Statis HANYA tampil di tab chat
+            if (tabName === 'chat') {
+                chatBar.classList.remove('hidden');
+            } else {
+                chatBar.classList.add('hidden');
+            }
         }
 
         function switchTab(tabName) {
@@ -460,6 +529,8 @@
             if (activeDot) activeDot.classList.remove('hidden');
 
             currentTab = tabName;
+            updateFloatingElements(tabName);
+
             if (tabName === 'chat') {
                 const container = document.getElementById('chatMessagesList');
                 container.scrollTop = container.scrollHeight;
@@ -495,7 +566,7 @@
                 document.getElementById('appScreen').classList.remove('hidden');
                 document.getElementById('bottomNav').classList.remove('hidden');
                 document.getElementById('bottomNav').classList.add('flex');
-                document.getElementById('openModalBtn').classList.remove('hidden');
+                updateFloatingElements(currentTab);
                 loadData();
                 loadChats();
             } else {
@@ -503,6 +574,7 @@
                 document.getElementById('appScreen').classList.add('hidden');
                 document.getElementById('bottomNav').classList.add('hidden');
                 document.getElementById('openModalBtn').classList.add('hidden');
+                document.getElementById('staticChatBar').classList.add('hidden');
             }
         }
 
@@ -514,11 +586,11 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // ==================== POST TEXT/PLAIN KE GAS (STANDAR ANTI-CORS) ====================
+        // ==================== POST TEXT/PLAIN KE GAS ====================
         async function postGas(payload) {
-            if (!appsScriptUrl) return { ok: false };
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) return { ok: false };
             try {
-                const res = await fetch(appsScriptUrl, {
+                const res = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
@@ -533,9 +605,9 @@
 
         // ==================== CHAT SYSTEM ====================
         async function loadChats() {
-            if (appsScriptUrl) {
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
                 try {
-                    const res = await fetch(`${appsScriptUrl}?action=getChats&t=${Date.now()}`);
+                    const res = await fetch(`${APPS_SCRIPT_URL}?action=getChats&t=${Date.now()}`);
                     const data = await res.json();
                     if (Array.isArray(data)) {
                         messages = data.filter(m => m && (m.sender || m.text)).map(m => ({
@@ -591,13 +663,11 @@
             document.getElementById('chatTextInput').value = '';
             renderChats();
 
-            if (appsScriptUrl) {
-                const res = await postGas(newMsg);
-                if (res.ok && res.data.status === 'ok') {
-                    showToast('Pesan tersimpan!');
-                } else {
-                    showToast('Gagal menyimpan pesan ke GAS');
-                }
+            const res = await postGas(newMsg);
+            if (res.ok && res.data.status === 'ok') {
+                showToast('Pesan tersimpan!');
+            } else {
+                showToast('Gagal menyimpan pesan ke GAS');
             }
         }
 
@@ -611,7 +681,7 @@
 
             if (messages.length === 0) {
                 container.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 space-y-2 py-10">
+                    <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 space-y-2 py-12">
                         <i class="bx bx-message-rounded-dots text-4xl text-slate-300"></i>
                         <p class="text-xs">Belum ada pesan di ruang diskusi.<br>Mulai obrolan dengan tim sekarang!</p>
                     </div>
@@ -659,10 +729,9 @@
 
         // ==================== MASTER DATA CONTENT ====================
         async function loadData() {
-            updateSyncStatus();
-            if (appsScriptUrl) {
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
                 try {
-                    const res = await fetch(`${appsScriptUrl}?t=${Date.now()}`);
+                    const res = await fetch(`${APPS_SCRIPT_URL}?t=${Date.now()}`);
                     const data = await res.json();
                     if (Array.isArray(data)) {
                         contents = data;
@@ -674,6 +743,7 @@
                     loadLocalData();
                 }
             } else {
+                updateSyncStatus(false);
                 loadLocalData();
             }
             renderDashboard();
@@ -712,16 +782,14 @@
             e.target.reset();
             setTodayDeadlineDefault();
 
-            if (appsScriptUrl) {
-                showToast('Menyimpan konten...');
-                const res = await postGas(newItem);
-                if (res.ok && res.data.status === 'created') {
-                    showToast('Tersimpan di Spreadsheet!');
-                    updateSyncStatus(true);
-                } else {
-                    showToast('Gagal menyimpan ke GAS');
-                    updateSyncStatus(false);
-                }
+            showToast('Menyimpan konten...');
+            const res = await postGas(newItem);
+            if (res.ok && res.data.status === 'created') {
+                showToast('Tersimpan di Spreadsheet!');
+                updateSyncStatus(true);
+            } else {
+                showToast('Gagal menyimpan ke GAS');
+                updateSyncStatus(false);
             }
         }
 
@@ -742,26 +810,24 @@
                 renderDashboard();
                 renderMatrixTable();
 
-                if (appsScriptUrl) {
-                    isUpdatingStage = true;
-                    showToast(`Mengupdate ke ${nextStage}...`);
+                isUpdatingStage = true;
+                showToast(`Mengupdate ke ${nextStage}...`);
 
-                    const res = await postGas({
-                        action: 'update',
-                        id: String(item.id).trim(),
-                        stage: nextStage,
-                        pic: nextPic
-                    });
+                const res = await postGas({
+                    action: 'update',
+                    id: String(item.id).trim(),
+                    stage: nextStage,
+                    pic: nextPic
+                });
 
-                    isUpdatingStage = false;
-                    if (res.ok && res.data.status === 'updated') {
-                        showToast(`Berhasil update: ${nextStage}`);
-                        updateSyncStatus(true);
-                    } else if (res.ok && res.data.status === 'not_found') {
-                        showToast('ID tidak ditemukan di Sheet, coba refresh');
-                    } else {
-                        showToast('Gagal update ke GAS');
-                    }
+                isUpdatingStage = false;
+                if (res.ok && res.data.status === 'updated') {
+                    showToast(`Berhasil update: ${nextStage}`);
+                    updateSyncStatus(true);
+                } else if (res.ok && res.data.status === 'not_found') {
+                    showToast('ID tidak ditemukan di Sheet, coba refresh');
+                } else {
+                    showToast('Gagal update ke GAS');
                 }
             }
         }
@@ -772,11 +838,9 @@
                 saveDataLocal();
                 renderDashboard();
                 renderMatrixTable();
-                if (appsScriptUrl) {
-                    const res = await postGas({ action: 'delete', id: String(id).trim() });
-                    if (res.ok && res.data.status === 'deleted') {
-                        showToast('Dihapus dari Database');
-                    }
+                const res = await postGas({ action: 'delete', id: String(id).trim() });
+                if (res.ok && res.data.status === 'deleted') {
+                    showToast('Dihapus dari Database');
                 }
             }
         }
@@ -954,23 +1018,10 @@
 
         function updateSyncStatus(isConnected = null) {
             const statusEl = document.getElementById('syncStatus');
-            if (!appsScriptUrl) {
-                statusEl.innerHTML = `<i class="bx bx-data text-amber-300 mr-1"></i> Mode Offline (URL Belum Diisi)`;
-            } else if (isConnected === false) {
-                statusEl.innerHTML = `<i class="bx bx-error-circle text-rose-300 mr-1"></i> Gagal Konek GAS (Cek Izin Deploy)`;
+            if (isConnected === false) {
+                statusEl.innerHTML = `<i class="bx bx-error-circle text-rose-300 mr-1"></i> Gagal Konek GAS (Cek URL Hardcode)`;
             } else {
                 statusEl.innerHTML = `<i class="bx bx-cloud-check text-emerald-300 mr-1"></i> Terhubung Spreadsheet`;
-            }
-        }
-
-        function promptAppsScriptUrl() {
-            const current = appsScriptUrl || '';
-            const newUrl = prompt('Masukkan Web App URL Google Apps Script Anda:', current);
-            if (newUrl !== null) {
-                appsScriptUrl = newUrl.trim();
-                localStorage.setItem('HUMAS_GAS_URL', appsScriptUrl);
-                loadData();
-                loadChats();
             }
         }
 
