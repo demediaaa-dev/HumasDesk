@@ -273,25 +273,34 @@
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- BOTTOM NAVIGATION BAR -->
+        <!-- ==================== BOTTOM NAVIGATION BAR (IKON BARU) ==================== -->
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
+                
+                <!-- 1. Dashboard: home-smile -->
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-smile" data-solid="bxs-home-smile" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bxs-home-smile text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
+                
+                <!-- 2. Konten: spa -->
                 <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-spa" data-solid="bxs-spa" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-spa text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
+                
+                <!-- 3. Chat: message-square-dots -->
                 <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-message-square-dots" data-solid="bxs-message-square-dots" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-message-square-dots text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-time" data-solid="bxs-time" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bx-time text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                
+                <!-- 4. Jadwal: notepad -->
+                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-notepad" data-solid="bxs-notepad" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-notepad text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
+
             </div>
         </nav>
 
@@ -389,7 +398,7 @@
         let messages = [];
         let isUpdatingStage = false;
 
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzIezWK0x4d-IK0GbvnGmIVt9YedOdAu8LV8SY48syQT7Jw7oOzHewGp72k8vKFr7pg/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbyMOgPRYP6o8zyou8EttOFknBi6eYHKSq-BlJKQLg8LRitxfzEsFuBKCLnxINg2d17m/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -514,9 +523,9 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // ==================== FORM-ENCODED POST (ANTI CORS & ANTI REDIRECT BUG) ====================
+        // ==================== NO-CORS POST KE GAS (ANTI BLOKIR REDIRECT 302) ====================
         async function postToGas(payload) {
-            if (!appsScriptUrl) return { ok: false };
+            if (!appsScriptUrl) return false;
             try {
                 const formBody = new URLSearchParams();
                 for (const key in payload) {
@@ -525,21 +534,17 @@
                     }
                 }
 
-                const response = await fetch(appsScriptUrl, {
+                // Menggunakan mode: 'no-cors' agar browser mengirim POST tanpa diblokir redirect 302 Google
+                await fetch(appsScriptUrl, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: formBody
                 });
 
-                const text = await response.text();
-                try {
-                    const resJson = JSON.parse(text);
-                    return { ok: true, status: resJson.status };
-                } catch (_) {
-                    return { ok: response.ok, status: 'sent' };
-                }
+                return true;
             } catch (err) {
                 console.error('GAS POST Error:', err);
-                return { ok: false };
+                return false;
             }
         }
 
@@ -604,9 +609,11 @@
             renderChats();
 
             if (appsScriptUrl) {
-                const res = await postToGas(newMsg);
-                if (res.ok) showToast('Pesan tersimpan ke Database');
-                else showToast('Gagal simpan pesan ke GAS');
+                const ok = await postToGas(newMsg);
+                if (ok) {
+                    showToast('Pesan terkirim');
+                    setTimeout(() => loadChats(), 1500);
+                }
             }
         }
 
@@ -722,14 +729,11 @@
             setTodayDeadlineDefault();
 
             if (appsScriptUrl) {
-                showToast('Menyimpan konten baru...');
-                const res = await postToGas(newItem);
-                if (res.ok) {
+                showToast('Menyimpan ke Spreadsheet...');
+                const ok = await postToGas(newItem);
+                if (ok) {
                     showToast('Tersimpan di Spreadsheet!');
-                    updateSyncStatus(true);
-                } else {
-                    showToast('Gagal simpan ke GAS!');
-                    updateSyncStatus(false);
+                    setTimeout(() => loadData(), 1500);
                 }
             }
         }
@@ -755,7 +759,7 @@
                     isUpdatingStage = true;
                     showToast(`Mengupdate ke ${nextStage}...`);
 
-                    const res = await postToGas({
+                    const ok = await postToGas({
                         action: 'update',
                         id: String(item.id).trim(),
                         stage: nextStage,
@@ -763,15 +767,9 @@
                     });
 
                     isUpdatingStage = false;
-
-                    if (res.ok && res.status === 'updated') {
-                        showToast(`Berhasil update: ${nextStage}`);
-                        updateSyncStatus(true);
-                    } else if (res.ok && res.status === 'not_found') {
-                        showToast('ID tidak cocok di Sheet, sinkron ulang...');
-                        loadData();
-                    } else {
-                        showToast('Update terkirim');
+                    if (ok) {
+                        showToast(`Tahap diperbarui: ${nextStage}`);
+                        setTimeout(() => loadData(), 1500);
                     }
                 }
             }
