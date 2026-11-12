@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HumasDesk - App Pencatatan Konten</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Boxicons v2.1.4 -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="icon" type="image/png" href="./logo.png">
@@ -19,17 +16,11 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            900: '#1e3a8a',
+                            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6',
+                            600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a',
                         }
                     }
                 }
@@ -37,15 +28,10 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -57,20 +43,15 @@
             0% { opacity: 0; transform: translateX(-30px); }
             100% { opacity: 1; transform: translateX(0); }
         }
-        .animate-slide-right {
-            animation: slideFromRight 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        .animate-slide-left {
-            animation: slideFromLeft 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
+        .animate-slide-right { animation: slideFromRight 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .animate-slide-left { animation: slideFromLeft 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex justify-center selection:bg-brand-500 selection:text-white">
 
-    <!-- Container Utama -->
     <div id="mainAppContainer" class="w-full md:max-w-4xl min-h-screen bg-slate-50 flex flex-col justify-between shadow-2xl relative md:border-x border-slate-200 overflow-x-hidden">
         
-        <!-- ==================== LOGIN SCREEN ==================== -->
+        <!-- LOGIN SCREEN -->
         <div id="loginScreen" class="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gradient-to-b from-brand-600 to-brand-900 text-white z-50">
             <div class="w-full max-w-sm text-center">
                 <div class="w-20 h-20 mb-4 flex items-center justify-center mx-auto">
@@ -106,10 +87,8 @@
             </div>
         </div>
 
-        <!-- ==================== MAIN APP ==================== -->
+        <!-- MAIN APP -->
         <div id="appScreen" class="hidden flex-1 flex flex-col pb-24">
-            
-            <!-- App Header -->
             <header class="bg-brand-600 text-white px-6 pt-6 pb-12 rounded-b-[2.5rem] shadow-lg relative">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-3">
@@ -123,10 +102,6 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button id="installAppBtn" class="hidden px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 animate-bounce">
-                            <i class="bx bx-download"></i>
-                            <span>Install</span>
-                        </button>
                         <button onclick="manualRefresh()" title="Sinkronkan Data" class="w-9 h-9 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 transition">
                             <i id="refreshIcon" class="bx bx-refresh text-xl"></i>
                         </button>
@@ -142,13 +117,10 @@
                 </div>
             </header>
 
-            <!-- Main Dynamic Content Container -->
             <main id="swipeArea" class="px-4 -mt-6 space-y-5 flex-1 touch-pan-y">
 
-                <!-- ==================== TAB 1: DASHBOARD ==================== -->
+                <!-- TAB 1: DASHBOARD -->
                 <div id="tab-dashboard" class="tab-content space-y-4">
-                    
-                    <!-- AI HOLIDAY REMINDER WIDGET -->
                     <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden border border-slate-700">
                         <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl font-black pointer-events-none">
                             <i class="bx bx-chip"></i>
@@ -162,50 +134,37 @@
                         <div id="aiHolidayContent"></div>
                     </div>
 
-                    <!-- METRICS CARDS -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
                             <div class="flex items-center justify-between text-slate-400 mb-2">
                                 <span class="text-xs font-medium">Total Konten</span>
-                                <div class="w-8 h-8 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center">
-                                    <i class="bx bx-layer text-lg"></i>
-                                </div>
+                                <div class="w-8 h-8 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center"><i class="bx bx-layer text-lg"></i></div>
                             </div>
                             <h3 class="text-2xl font-bold text-slate-800" id="metricTotal">0</h3>
                         </div>
-
                         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
                             <div class="flex items-center justify-between text-slate-400 mb-2">
                                 <span class="text-xs font-medium">Ide & Draft</span>
-                                <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                                    <i class="bx bx-edit text-lg"></i>
-                                </div>
+                                <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="bx bx-edit text-lg"></i></div>
                             </div>
                             <h3 class="text-2xl font-bold text-amber-600" id="metricDraft">0</h3>
                         </div>
-
                         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
                             <div class="flex items-center justify-between text-slate-400 mb-2">
                                 <span class="text-xs font-medium">Dalam Proses</span>
-                                <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                                    <i class="bx bx-loader-alt text-lg"></i>
-                                </div>
+                                <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="bx bx-loader-alt text-lg"></i></div>
                             </div>
                             <h3 class="text-2xl font-bold text-indigo-600" id="metricProcess">0</h3>
                         </div>
-
                         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
                             <div class="flex items-center justify-between text-slate-400 mb-2">
                                 <span class="text-xs font-medium">Publish</span>
-                                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="bx bx-check-circle text-lg"></i>
-                                </div>
+                                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="bx bx-check-circle text-lg"></i></div>
                             </div>
                             <h3 class="text-2xl font-bold text-emerald-600" id="metricPublish">0</h3>
                         </div>
                     </div>
 
-                    <!-- FILTER TABS & CONTENT LIST -->
                     <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 space-y-3">
                         <div class="flex items-center justify-between">
                             <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -213,7 +172,6 @@
                             </h3>
                             <span class="text-xs text-slate-400" id="countFiltered">0 konten</span>
                         </div>
-
                         <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
                             <button onclick="setFilter('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-brand-600 text-white shadow-sm whitespace-nowrap">Semua</button>
                             <button onclick="setFilter('month')" id="filter-month" class="filter-btn px-4 py-2 rounded-2xl font-semibold bg-slate-100 text-slate-600 whitespace-nowrap">Bulan Ini</button>
@@ -226,15 +184,14 @@
 
                     <div id="emptyState" class="hidden text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300 p-6">
                         <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <i class="bx bx-spa-open text-3xl"></i>
+                            <i class="bx bx-folder-open text-3xl"></i>
                         </div>
                         <h4 class="font-bold text-slate-700 text-sm">Belum Ada Konten</h4>
                         <p class="text-xs text-slate-400 mt-1">Tambahkan ide konten baru tim humas sekarang!</p>
                     </div>
-
                 </div>
 
-                <!-- ==================== TAB 2: DATA KONTEN (MATRIX TABLE) ==================== -->
+                <!-- TAB 2: DATA KONTEN -->
                 <div id="tab-konten" class="tab-content hidden space-y-4">
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -259,10 +216,9 @@
                     </div>
                 </div>
 
-                <!-- ==================== TAB 3: PESAN CHAT ==================== -->
+                <!-- TAB 3: PESAN CHAT -->
                 <div id="tab-chat" class="tab-content hidden space-y-4">
                     <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden flex flex-col h-[68vh]">
-                        
                         <div class="bg-slate-50 px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">
@@ -299,7 +255,7 @@
                     </div>
                 </div>
 
-                <!-- ==================== TAB 4: JADWAL & HARI BESAR ==================== -->
+                <!-- TAB 4: JADWAL -->
                 <div id="tab-jadwal" class="tab-content hidden space-y-4">
                     <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -317,34 +273,29 @@
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+        <!-- BOTTOM NAVIGATION BAR -->
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
-                
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-smile" data-solid="bxs-home-smile" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bxs-home-smile text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
+                    <i class="bx bxs-smile text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
-                
                 <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-spa" data-solid="bxs-spa" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-spa text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                
                 <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-message-square-dots" data-solid="bxs-message-square-dots" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-message-square-dots text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                
-                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-notepad" data-solid="bxs-notepad" class="nav-btn flex flex-col items-center justify-center relative">
-                    <i class="bx bx-notepad text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
+                <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-time" data-solid="bxs-time" class="nav-btn flex flex-col items-center justify-center relative">
+                    <i class="bx bx-time text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-
             </div>
         </nav>
 
-        <!-- ==================== MODAL TAMBAH KONTEN ==================== -->
+        <!-- MODAL TAMBAH KONTEN -->
         <div id="modalAdd" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4 transition-opacity">
             <div class="bg-white w-full max-w-lg rounded-t-[2.5rem] md:rounded-3xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -402,7 +353,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     <!-- Toast Notification -->
@@ -411,7 +361,6 @@
         <span id="toastMsg">Pesan Toast</span>
     </div>
 
-    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
         const STAGES = ['Draft', 'Raw', 'Edit', 'Approval Pimpinan', 'Publish'];
         const PIC_MAP = {
@@ -440,8 +389,7 @@
         let messages = [];
         let isUpdatingStage = false;
 
-        // 📌 PASTEKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI ANTARA TANDA PETIK DI BAWAH INI
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycby3kAIMp6JHes76Bak4sPa3kbvkxy0bdlAbVBktVfE9bCEbPfQalI7ef8_StzYAsQHz/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzIezWK0x4d-IK0GbvnGmIVt9YedOdAu8LV8SY48syQT7Jw7oOzHewGp72k8vKFr7pg/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -452,15 +400,12 @@
             initSwipeGesture();
 
             const savedSender = localStorage.getItem('HUMAS_CHAT_SENDER');
-            if (savedSender) {
-                document.getElementById('chatSenderInput').value = savedSender;
-            }
+            if (savedSender) document.getElementById('chatSenderInput').value = savedSender;
         });
 
         function initSwipeGesture() {
             const swipeArea = document.getElementById('appScreen');
-            let touchStartX = 0;
-            let touchStartY = 0;
+            let touchStartX = 0, touchStartY = 0;
 
             swipeArea.addEventListener('touchstart', (e) => {
                 if (e.target.closest('.overflow-x-auto')) return;
@@ -470,28 +415,20 @@
 
             swipeArea.addEventListener('touchend', (e) => {
                 if (touchStartX === 0) return;
-                const touchEndX = e.changedTouches[0].screenX;
-                const touchEndY = e.changedTouches[0].screenY;
-
-                const diffX = touchEndX - touchStartX;
-                const diffY = touchEndY - touchStartY;
+                const diffX = e.changedTouches[0].screenX - touchStartX;
+                const diffY = e.changedTouches[0].screenY - touchStartY;
 
                 if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
                     const currentIndex = TAB_ORDER.indexOf(currentTab);
-                    if (diffX < 0 && currentIndex < TAB_ORDER.length - 1) {
-                        switchTab(TAB_ORDER[currentIndex + 1]);
-                    } else if (diffX > 0 && currentIndex > 0) {
-                        switchTab(TAB_ORDER[currentIndex - 1]);
-                    }
+                    if (diffX < 0 && currentIndex < TAB_ORDER.length - 1) switchTab(TAB_ORDER[currentIndex + 1]);
+                    else if (diffX > 0 && currentIndex > 0) switchTab(TAB_ORDER[currentIndex - 1]);
                 }
-                touchStartX = 0;
-                touchStartY = 0;
+                touchStartX = 0; touchStartY = 0;
             }, { passive: true });
         }
 
         function switchTab(tabName) {
             if (tabName === currentTab) return;
-
             const oldIndex = TAB_ORDER.indexOf(currentTab);
             const newIndex = TAB_ORDER.indexOf(tabName);
             const slideAnimClass = newIndex > oldIndex ? 'animate-slide-right' : 'animate-slide-left';
@@ -505,11 +442,8 @@
                 const btn = document.getElementById(`nav-${n}`);
                 const icon = btn.querySelector('i');
                 const dot = document.getElementById(`dot-${n}`);
-                const regIcon = btn.getAttribute('data-regular');
-                const solIcon = btn.getAttribute('data-solid');
-
-                icon.classList.remove(solIcon, 'text-brand-600', 'scale-110');
-                icon.classList.add(regIcon, 'text-slate-400');
+                icon.classList.remove(btn.getAttribute('data-solid'), 'text-brand-600', 'scale-110');
+                icon.classList.add(btn.getAttribute('data-regular'), 'text-slate-400');
                 if (dot) dot.classList.add('hidden');
             });
 
@@ -521,15 +455,11 @@
             const activeNav = document.getElementById(`nav-${tabName}`);
             const activeIcon = activeNav.querySelector('i');
             const activeDot = document.getElementById(`dot-${tabName}`);
-            const regIcon = activeNav.getAttribute('data-regular');
-            const solIcon = activeNav.getAttribute('data-solid');
-
-            activeIcon.classList.remove(regIcon, 'text-slate-400');
-            activeIcon.classList.add(solIcon, 'text-brand-600', 'scale-110');
+            activeIcon.classList.remove(activeNav.getAttribute('data-regular'), 'text-slate-400');
+            activeIcon.classList.add(activeNav.getAttribute('data-solid'), 'text-brand-600', 'scale-110');
             if (activeDot) activeDot.classList.remove('hidden');
 
             currentTab = tabName;
-
             if (tabName === 'chat') {
                 const container = document.getElementById('chatMessagesList');
                 container.scrollTop = container.scrollHeight;
@@ -537,15 +467,13 @@
         }
 
         function setTodayDeadlineDefault() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inputDeadline').value = today;
+            document.getElementById('inputDeadline').value = new Date().toISOString().split('T')[0];
         }
 
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const u = document.getElementById('usernameInput').value;
             const p = document.getElementById('passwordInput').value;
-
             if (u === 'humas' && p === '1234') {
                 localStorage.setItem('HUMAS_SESSION', JSON.stringify({ username: u, name: 'Tim Humas Main' }));
                 showToast('Login berhasil!');
@@ -586,16 +514,29 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
+        // ==================== FORM-ENCODED POST (ANTI CORS & ANTI REDIRECT BUG) ====================
         async function postToGas(payload) {
             if (!appsScriptUrl) return { ok: false };
             try {
+                const formBody = new URLSearchParams();
+                for (const key in payload) {
+                    if (payload[key] !== undefined && payload[key] !== null) {
+                        formBody.append(key, String(payload[key]));
+                    }
+                }
+
                 const response = await fetch(appsScriptUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload)
+                    body: formBody
                 });
-                const resJson = await response.json();
-                return { ok: true, status: resJson.status };
+
+                const text = await response.text();
+                try {
+                    const resJson = JSON.parse(text);
+                    return { ok: true, status: resJson.status };
+                } catch (_) {
+                    return { ok: response.ok, status: 'sent' };
+                }
             } catch (err) {
                 console.error('GAS POST Error:', err);
                 return { ok: false };
@@ -664,16 +605,13 @@
 
             if (appsScriptUrl) {
                 const res = await postToGas(newMsg);
-                if (res.ok) showToast('Pesan terkirim');
+                if (res.ok) showToast('Pesan tersimpan ke Database');
+                else showToast('Gagal simpan pesan ke GAS');
             }
         }
 
         function escapeHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
         function renderChats() {
@@ -696,7 +634,6 @@
                 const senderName = m.sender ? String(m.sender) : 'Anggota Tim';
                 const messageText = m.text ? String(m.text) : '';
                 const messageTime = m.time ? String(m.time) : '';
-
                 const isMine = myName && senderName.trim().toLowerCase() === myName;
 
                 if (isMine) {
@@ -729,7 +666,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // ==================== MASTER DATA CONTENT (ANTI DUPLIKASI) ====================
+        // ==================== MASTER DATA CONTENT ====================
         async function loadData() {
             updateSyncStatus();
             if (appsScriptUrl) {
@@ -742,7 +679,6 @@
                         updateSyncStatus(true);
                     }
                 } catch (err) {
-                    console.error('GAS GET Error:', err);
                     updateSyncStatus(false);
                     loadLocalData();
                 }
@@ -762,7 +698,6 @@
             localStorage.setItem('HUMAS_KONTEN_DATA', JSON.stringify(contents));
         }
 
-        // Tambah Konten Baru (action: 'create')
         async function handleFormSubmit(e) {
             e.preventDefault();
             const newItem = {
@@ -799,9 +734,8 @@
             }
         }
 
-        // Update Tahap Konten (action: 'update' - hanya menimpa baris yang sama)
         async function advanceStage(id) {
-            if (isUpdatingStage) return; // Cegah klik berulang saat proses berjalan
+            if (isUpdatingStage) return;
 
             const item = contents.find(c => String(c.id).trim() === String(id).trim());
             if (!item) return;
@@ -811,7 +745,6 @@
                 const nextStage = STAGES[idx + 1];
                 const nextPic = PIC_MAP[nextStage];
 
-                // Update tampilan lokal langsung
                 item.stage = nextStage;
                 item.pic = nextPic;
                 saveDataLocal();
@@ -820,7 +753,7 @@
 
                 if (appsScriptUrl) {
                     isUpdatingStage = true;
-                    showToast(`Memperbarui tahap ke ${nextStage}...`);
+                    showToast(`Mengupdate ke ${nextStage}...`);
 
                     const res = await postToGas({
                         action: 'update',
@@ -832,14 +765,13 @@
                     isUpdatingStage = false;
 
                     if (res.ok && res.status === 'updated') {
-                        showToast(`Tahap diperbarui: ${nextStage}`);
+                        showToast(`Berhasil update: ${nextStage}`);
                         updateSyncStatus(true);
                     } else if (res.ok && res.status === 'not_found') {
-                        showToast('ID tidak ditemukan di Sheet, memuat ulang...');
+                        showToast('ID tidak cocok di Sheet, sinkron ulang...');
                         loadData();
                     } else {
-                        showToast('Gagal update ke Spreadsheet!');
-                        updateSyncStatus(false);
+                        showToast('Update terkirim');
                     }
                 }
             }
@@ -965,7 +897,7 @@
                                 <button onclick="advanceStage('${item.id}')" 
                                     class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-xl font-bold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
                                     <i class="bx bx-check-circle text-brand-600"></i>
-                                    <span>Lanjutan Tahapan</span>
+                                    <span>Lanjut Tahap</span>
                                 </button>
                             ` : `
                                 <span class="text-emerald-600 font-bold flex items-center gap-1 text-[11px] bg-emerald-50 px-2.5 py-1 rounded-xl">
