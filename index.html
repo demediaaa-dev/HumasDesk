@@ -389,7 +389,7 @@
         let messages = [];
         let isUpdatingStage = false;
 
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbwMJuXjeV2sMIokrxCSGklYxRP5nAwa5NpMjChe81aC46BebgVhpYQDd2YuS_eek-ks/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbwZz9SgUHmxej6p8PcZm2InWCbE0ITzNKY3g4cnW-GMHIYZs_Z9FjtHS9I6keKmTRvr/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -514,40 +514,38 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // ==================== KOMUNIKASI KE GAS (CRUD MODULAR) ====================
-        async function sendToGas(paramsObj) {
+        // ==================== POST TEXT/PLAIN KE GAS (STANDAR ANTI-CORS) ====================
+        async function postGas(payload) {
             if (!appsScriptUrl) return { ok: false };
             try {
-                const url = new URL(appsScriptUrl);
-                for (const key in paramsObj) {
-                    if (paramsObj[key] !== undefined && paramsObj[key] !== null) {
-                        url.searchParams.append(key, String(paramsObj[key]));
-                    }
-                }
-                url.searchParams.append('_t', Date.now());
-
-                const res = await fetch(url.toString());
+                const res = await fetch(appsScriptUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
                 const json = await res.json();
-                console.log('GAS Response:', json);
                 return { ok: true, data: json };
             } catch (err) {
-                console.error('GAS Error:', err);
-                return { ok: false, error: err };
+                console.error('GAS POST Error:', err);
+                return { ok: false };
             }
         }
 
-        // ==================== CHAT CRUD ====================
+        // ==================== CHAT SYSTEM ====================
         async function loadChats() {
             if (appsScriptUrl) {
-                const res = await sendToGas({ action: 'readChat' });
-                if (res.ok && Array.isArray(res.data)) {
-                    messages = res.data.filter(m => m && (m.sender || m.text)).map(m => ({
-                        sender: m.sender || 'Anggota Tim',
-                        text: m.text || '',
-                        time: m.time || ''
-                    }));
-                    localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
-                } else {
+                try {
+                    const res = await fetch(`${appsScriptUrl}?action=getChats&t=${Date.now()}`);
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        messages = data.filter(m => m && (m.sender || m.text)).map(m => ({
+                            sender: m.sender || 'Anggota Tim',
+                            text: m.text || '',
+                            time: m.time || ''
+                        }));
+                        localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
+                    }
+                } catch (e) {
                     loadLocalChats();
                 }
             } else {
@@ -581,24 +579,24 @@
             const now = new Date();
             const timeFormatted = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
-            const payload = {
-                action: 'createChat',
+            const newMsg = {
+                action: 'sendChat',
                 sender: sender,
                 text: text,
                 time: timeFormatted
             };
 
-            messages.push(payload);
+            messages.push(newMsg);
             localStorage.setItem('HUMAS_CHAT_DATA', JSON.stringify(messages));
             document.getElementById('chatTextInput').value = '';
             renderChats();
 
             if (appsScriptUrl) {
-                const res = await sendToGas(payload);
-                if (res.ok && res.data && res.data.status === 'chat_saved') {
+                const res = await postGas(newMsg);
+                if (res.ok && res.data.status === 'ok') {
                     showToast('Pesan tersimpan!');
                 } else {
-                    showToast('Error: ' + (res.data?.message || 'Gagal kirim pesan'));
+                    showToast('Gagal menyimpan pesan ke GAS');
                 }
             }
         }
@@ -659,16 +657,19 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // ==================== KONTEN CRUD ====================
+        // ==================== MASTER DATA CONTENT ====================
         async function loadData() {
             updateSyncStatus();
             if (appsScriptUrl) {
-                const res = await sendToGas({ action: 'readKonten' });
-                if (res.ok && Array.isArray(res.data)) {
-                    contents = res.data;
-                    saveDataLocal();
-                    updateSyncStatus(true);
-                } else {
+                try {
+                    const res = await fetch(`${appsScriptUrl}?t=${Date.now()}`);
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        contents = data;
+                        saveDataLocal();
+                        updateSyncStatus(true);
+                    }
+                } catch (err) {
                     updateSyncStatus(false);
                     loadLocalData();
                 }
@@ -691,7 +692,7 @@
         async function handleFormSubmit(e) {
             e.preventDefault();
             const newItem = {
-                action: 'createKonten',
+                action: 'create',
                 id: 'KONTEN-' + Date.now(),
                 ide: document.getElementById('inputIde').value,
                 link: document.getElementById('inputLink').value,
@@ -713,12 +714,12 @@
 
             if (appsScriptUrl) {
                 showToast('Menyimpan konten...');
-                const res = await sendToGas(newItem);
-                if (res.ok && res.data && res.data.status === 'created') {
+                const res = await postGas(newItem);
+                if (res.ok && res.data.status === 'created') {
                     showToast('Tersimpan di Spreadsheet!');
                     updateSyncStatus(true);
                 } else {
-                    showToast('Error: ' + (res.data?.message || 'Gagal simpan konten'));
+                    showToast('Gagal menyimpan ke GAS');
                     updateSyncStatus(false);
                 }
             }
@@ -745,19 +746,21 @@
                     isUpdatingStage = true;
                     showToast(`Mengupdate ke ${nextStage}...`);
 
-                    const res = await sendToGas({
-                        action: 'updateKonten',
+                    const res = await postGas({
+                        action: 'update',
                         id: String(item.id).trim(),
                         stage: nextStage,
                         pic: nextPic
                     });
 
                     isUpdatingStage = false;
-                    if (res.ok && res.data && res.data.status === 'updated') {
+                    if (res.ok && res.data.status === 'updated') {
                         showToast(`Berhasil update: ${nextStage}`);
                         updateSyncStatus(true);
+                    } else if (res.ok && res.data.status === 'not_found') {
+                        showToast('ID tidak ditemukan di Sheet, coba refresh');
                     } else {
-                        showToast('Error: ' + (res.data?.message || 'Gagal update tahap'));
+                        showToast('Gagal update ke GAS');
                     }
                 }
             }
@@ -770,11 +773,9 @@
                 renderDashboard();
                 renderMatrixTable();
                 if (appsScriptUrl) {
-                    const res = await sendToGas({ action: 'deleteKonten', id: String(id).trim() });
-                    if (res.ok && res.data && res.data.status === 'deleted') {
+                    const res = await postGas({ action: 'delete', id: String(id).trim() });
+                    if (res.ok && res.data.status === 'deleted') {
                         showToast('Dihapus dari Database');
-                    } else {
-                        showToast('Error: ' + (res.data?.message || 'Gagal hapus'));
                     }
                 }
             }
