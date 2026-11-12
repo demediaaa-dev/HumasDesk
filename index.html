@@ -273,34 +273,25 @@
             <i class="bx bx-plus"></i>
         </button>
 
-        <!-- ==================== BOTTOM NAVIGATION BAR (IKON BARU) ==================== -->
+        <!-- BOTTOM NAVIGATION BAR -->
         <nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-lg justify-center">
             <div class="w-full md:max-w-4xl grid grid-cols-4 py-3.5">
-                
-                <!-- 1. Dashboard: home-smile -->
                 <button onclick="switchTab('dashboard')" id="nav-dashboard" data-regular="bx-home-smile" data-solid="bxs-home-smile" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bxs-home-smile text-2xl text-brand-600 transition-transform duration-200 scale-110"></i>
                     <span id="dot-dashboard" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 transition-all"></span>
                 </button>
-                
-                <!-- 2. Konten: spa -->
                 <button onclick="switchTab('konten')" id="nav-konten" data-regular="bx-spa" data-solid="bxs-spa" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-spa text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-konten" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                
-                <!-- 3. Chat: message-square-dots -->
                 <button onclick="switchTab('chat')" id="nav-chat" data-regular="bx-message-square-dots" data-solid="bxs-message-square-dots" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-message-square-dots text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-chat" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-                
-                <!-- 4. Jadwal: notepad -->
                 <button onclick="switchTab('jadwal')" id="nav-jadwal" data-regular="bx-notepad" data-solid="bxs-notepad" class="nav-btn flex flex-col items-center justify-center relative">
                     <i class="bx bx-notepad text-2xl text-slate-400 hover:text-slate-600 transition-transform duration-200"></i>
                     <span id="dot-jadwal" class="w-1.5 h-1.5 bg-brand-600 rounded-full absolute -bottom-1.5 hidden transition-all"></span>
                 </button>
-
             </div>
         </nav>
 
@@ -398,7 +389,7 @@
         let messages = [];
         let isUpdatingStage = false;
 
-        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbwgjhdtwcsJyn2VJOxMTHP8nxf9RyT9EYZJ02kAiG5SGU8TdrOqZfWswm7pElyiaaoM/exec'; 
+        let defaultGasUrl = 'https://script.google.com/macros/s/AKfycbzZzCLZ4vDx2lyor9ovtUdHZabP0nZSXLy7TGUBLAuy1MtJUqKzowIQyFU1sw7ZE6Lp/exec'; 
         let appsScriptUrl = localStorage.getItem('HUMAS_GAS_URL') || defaultGasUrl;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -523,27 +514,25 @@
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // ==================== NO-CORS POST KE GAS (ANTI BLOKIR REDIRECT 302) ====================
-        async function postToGas(payload) {
+        // ==================== QUERY-URL + NO-CORS (100% TEMBUS REDIRECT GAS) ====================
+        async function sendToGas(paramsObj) {
             if (!appsScriptUrl) return false;
             try {
-                const formBody = new URLSearchParams();
-                for (const key in payload) {
-                    if (payload[key] !== undefined && payload[key] !== null) {
-                        formBody.append(key, String(payload[key]));
+                const url = new URL(appsScriptUrl);
+                for (const key in paramsObj) {
+                    if (paramsObj[key] !== undefined && paramsObj[key] !== null) {
+                        url.searchParams.append(key, String(paramsObj[key]));
                     }
                 }
+                url.searchParams.append('_t', Date.now());
 
-                // Menggunakan mode: 'no-cors' agar browser mengirim POST tanpa diblokir redirect 302 Google
-                await fetch(appsScriptUrl, {
+                await fetch(url.toString(), {
                     method: 'POST',
-                    mode: 'no-cors',
-                    body: formBody
+                    mode: 'no-cors'
                 });
-
                 return true;
             } catch (err) {
-                console.error('GAS POST Error:', err);
+                console.error('GAS Send Error:', err);
                 return false;
             }
         }
@@ -597,7 +586,7 @@
             const timeFormatted = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
             const newMsg = {
-                type: 'chat',
+                action: 'sendChat',
                 sender: sender,
                 text: text,
                 time: timeFormatted
@@ -609,7 +598,7 @@
             renderChats();
 
             if (appsScriptUrl) {
-                const ok = await postToGas(newMsg);
+                const ok = await sendToGas(newMsg);
                 if (ok) {
                     showToast('Pesan terkirim');
                     setTimeout(() => loadChats(), 1500);
@@ -730,7 +719,7 @@
 
             if (appsScriptUrl) {
                 showToast('Menyimpan ke Spreadsheet...');
-                const ok = await postToGas(newItem);
+                const ok = await sendToGas(newItem);
                 if (ok) {
                     showToast('Tersimpan di Spreadsheet!');
                     setTimeout(() => loadData(), 1500);
@@ -759,7 +748,7 @@
                     isUpdatingStage = true;
                     showToast(`Mengupdate ke ${nextStage}...`);
 
-                    const ok = await postToGas({
+                    const ok = await sendToGas({
                         action: 'update',
                         id: String(item.id).trim(),
                         stage: nextStage,
@@ -782,7 +771,7 @@
                 renderDashboard();
                 renderMatrixTable();
                 if (appsScriptUrl) {
-                    await postToGas({ action: 'delete', id: String(id).trim() });
+                    await sendToGas({ action: 'delete', id: String(id).trim() });
                     showToast('Dihapus dari Database');
                 }
             }
